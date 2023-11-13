@@ -15,3 +15,7 @@ Install packages:
 
 ## Run Tests
 `npx hardhat test`
+
+
+## network config
+![img.png](img.png)
