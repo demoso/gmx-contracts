@@ -16,12 +16,14 @@ async function getArbValues(signer) {
   const weth = await contractAt("WETH", tokens.nativeToken.address)
   const orderBook = await contractAt("OrderBook", "0x09f77E8A13De9a35a7231028187e9fD5DB8a2ACB")
   const referralStorage = await contractAt("ReferralStorage", "0xe6fab3f0c7199b0d34d7fbe83394fc0e0d06e99d")
-
+ //限价单机器人地址
   const orderKeepers = [
     { address: "0xd4266F8F82F7405429EE18559e548979D49160F3" },
     { address: "0x2D1545d6deDCE867fca3091F49B29D16B230a6E4" }
   ]
+
   const liquidators = [
+    //仓位管理机器人地址
     { address: "0x44311c91008DDE73dE521cd25136fD37d616802c" }
   ]
 
