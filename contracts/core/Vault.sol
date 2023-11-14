@@ -17,13 +17,13 @@ contract Vault is ReentrancyGuard, IVault {
     using SafeERC20 for IERC20;
 
     struct Position {
-        uint256 size;
-        uint256 collateral;
-        uint256 averagePrice;
-        uint256 entryFundingRate;
-        uint256 reserveAmount;
-        int256 realisedPnl;
-        uint256 lastIncreasedTime;
+        uint256 size; // Position大小
+        uint256 collateral;// 抵押品价格 USD
+        uint256 averagePrice;// 平均持仓价格 USD
+        uint256 entryFundingRate;  // 入场资金费率
+        uint256 reserveAmount; // 抵押品token储备数量
+        int256 realisedPnl; // 已兑付盈亏
+        uint256 lastIncreasedTime; // 最后加仓时间
     }
 
     uint256 public constant BASIS_POINTS_DIVISOR = 10000;
