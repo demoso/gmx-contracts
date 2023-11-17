@@ -4,8 +4,14 @@ const { deployContract } = require("../../shared/fixtures")
 const { expandDecimals, reportGasUsed, gasUsed } = require("../../shared/utilities")
 const { toChainlinkPrice } = require("../../shared/chainlink")
 const { toUsd, toNormalizedPrice } = require("../../shared/units")
-const { initVault, getBnbConfig, getBtcConfig, getDaiConfig } = require("../Vault/helpers")
-const { getDefault, validateOrderFields, getTxFees, positionWrapper, defaultCreateIncreaseOrderFactory } = require('./helpers');
+const {initVault, getBnbConfig, getBtcConfig, getDaiConfig} = require("../Vault/helpers")
+const {
+  getDefault,
+  validateOrderFields,
+  getTxFees,
+  positionWrapper,
+  defaultCreateIncreaseOrderFactory
+} = require('./helpers');
 
 use(solidity);
 
@@ -15,40 +21,57 @@ const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 const PRICE_PRECISION = ethers.BigNumber.from(10).pow(30);
 const BASIS_POINTS_DIVISOR = 10000;
 
+
+// describe('hooks', function() {
+//   before(function() {
+//     // 在当前describe区块的第一个测试前运行
+//   });
+//   after(function() {
+//     // 在当前describe区块的最后一个测试后运行
+//   });
+//   beforeEach(function() {
+//     // 在当前describe区块中每个测试前运行
+//   });
+//   afterEach(function() {
+//     // 在当前describe区块中每个测试后运行
+//   });
+//   // 一个或多个测试用例
+// });
+
 describe("OrderBook, increase position orders", function () {
-    /*
-    checklist:
-    create order
-    - [x] revert if fee too low
-    - [x] revert if fee != transferred BNB (if not WETH)
-    - [x] revert if fee + amountIn  != transferred BNB (if WETH)
-    - [x] transfer execution fee
-    - [x] transfer token to OrderBook (if transfer token != WETH)
-    - [x] transfer execution fee + amount with BNB (if WETH)
-    - [x] swap tokens if path.length > 1
-    - [x] revert if path.length > 3
-    - [x] revert if transferred collateral usd is too low
-    - [x] create order with provided fields
-    cancel order
-    - [x] revert if order doesn't exist
-    - [x] delete order
-    - [x] transfer BNB if WETH
-    - [x] transfer BNB and token if not WETH
-    update
-    - [x] revert if does not exist
-    - [x] update all fields provided
-    execute
-    - [x] revert if does not exist
-    - [x] revert if price invalid
-        - [x] currentPrice < triggerPrice && triggerAboveThreshold is true
-        - [x] currentPrice > triggerPrice && triggerAboveThreshold is false
-    - [x] delete order
-    - [x] open position
-        - [x] position.collateral == order.collateral
-        - [x] position.size == order.sizeDelta (if new)
-        - [x] position.size == order.sizeDelta + positionBefore.size (if not new)
-    - [x] pay fees to executor
-    */
+  /*
+  checklist:
+  create order
+  - [x] revert if fee too low
+  - [x] revert if fee != transferred BNB (if not WETH)
+  - [x] revert if fee + amountIn  != transferred BNB (if WETH)
+  - [x] transfer execution fee
+  - [x] transfer token to OrderBook (if transfer token != WETH)
+  - [x] transfer execution fee + amount with BNB (if WETH)
+  - [x] swap tokens if path.length > 1
+  - [x] revert if path.length > 3
+  - [x] revert if transferred collateral usd is too low
+  - [x] create order with provided fields
+  cancel order
+  - [x] revert if order doesn't exist
+  - [x] delete order
+  - [x] transfer BNB if WETH
+  - [x] transfer BNB and token if not WETH
+  update
+  - [x] revert if does not exist
+  - [x] update all fields provided
+  execute
+  - [x] revert if does not exist
+  - [x] revert if price invalid
+      - [x] currentPrice < triggerPrice && triggerAboveThreshold is true
+      - [x] currentPrice > triggerPrice && triggerAboveThreshold is false
+  - [x] delete order
+  - [x] open position
+      - [x] position.collateral == order.collateral
+      - [x] position.size == order.sizeDelta (if new)
+      - [x] position.size == order.sizeDelta + positionBefore.size (if not new)
+  - [x] pay fees to executor
+  */
 
     const provider = waffle.provider
     const [wallet, user0, user1, user2, user3] = provider.getWallets()
