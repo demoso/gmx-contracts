@@ -97,7 +97,7 @@ contract Router is IRouter {
         uint256 amountOut = _swap(_path, _minOut, _receiver);
         emit Swap(msg.sender, _path[0], _path[_path.length - 1], msg.value, amountOut);
     }
-
+    //用户发起现货交易
     function swapTokensToETH(address[] memory _path, uint256 _amountIn, uint256 _minOut, address payable _receiver) external {
         require(_path[_path.length - 1] == weth, "Router: invalid _path");
         IERC20(_path[0]).safeTransferFrom(_sender(), vault, _amountIn);
