@@ -8,7 +8,7 @@ import "./interfaces/IOrderBook.sol";
 
 import "../peripherals/interfaces/ITimelock.sol";
 import "./BasePositionManager.sol";
-//仓位管理
+//仓位管理， 清算机器人会调用该合约
 contract PositionManager is BasePositionManager {
 
     address public orderBook;
