@@ -1,0 +1,717 @@
+jimmy@jimmydeMacBook-Pro gmx-contracts % npx hardhat test
+Generating typings for: 125 artifacts in dir: typechain for target: ethers-v5
+Successfully generated 237 typings!
+Compiled 125 Solidity files successfully (evm target: istanbul).
+
+
+  TokenManager
+    ✔ inits (104ms)
+    ✔ signalApprove (66ms)
+    ✔ signApprove (186ms)
+    ✔ approve (364ms)
+    ✔ signalApproveNFT (40ms)
+    ✔ signApproveNFT (149ms)
+    ✔ approveNFT (371ms)
+    ✔ signalApproveNFTs (38ms)
+    ✔ signApproveNFTs (146ms)
+    ✔ approveNFTs (421ms)
+    ✔ receiveNFTs (258ms)
+    ✔ signalSetAdmin (56ms)
+    ✔ signSetAdmin (166ms)
+    ✔ setAdmin (294ms)
+    ✔ signalSetGov (59ms)
+    ✔ signSetGov (129ms)
+    ✔ setGov (425ms)
+
+  GlpManager
+    ✔ inits
+    ✔ setGov (61ms)
+    ✔ setHandler (59ms)
+    ✔ setCooldownDuration (69ms)
+    ✔ setAumAdjustment (233ms)
+    ✔ setShortsTrackerAveragePriceWeight (46ms)
+    ✔ setShortsTracker (46ms)
+addLiquidity gas used 576643
+removeLiquidity gas used 460624
+    ✔ addLiquidity, removeLiquidity (4467ms)
+    ✔ addLiquidityForAccount, removeLiquidityForAccount (1186ms)
+    Different avg price in Vault and ShortsTracker
+      ✔ GlpManager ignores ShortsTracker if flag is off (151ms)
+      ✔ GlpManager switches gradually to ShortsTracker average price (406ms)
+      ✔ GlpManager switches back to Vault average price after flag is turned off (625ms)
+
+  OrderBook, cancelMultiple
+    ✔ cancelMultiple (359ms)
+
+  OrderBook, decrease position orders
+    ✔ Create decrase order, bad fee
+createDecreaseOrder gas used 296025
+    ✔ Create decrease order, long (47ms)
+updateDecreaseOrder gas used 52488
+    ✔ updateDecreaseOrder (76ms)
+createDecreaseOrder gas used 276113
+    ✔ Create decrease order, short (44ms)
+    ✔ Create two orders (80ms)
+    ✔ Execute decrease order, invalid price (572ms)
+    ✔ Execute decrease order, non-existent (39ms)
+executeDecreaseOrder gas used 313774
+    ✔ Execute decrease order, long (386ms)
+executeDecreaseOrder gas used 319515
+    ✔ Execute decrease order, short, BTC (367ms)
+createSwapOrder 276089
+executeDecreaseOrder gas used 329067
+    ✔ Execute decrease order, long, BNB (409ms)
+cancelDecreaseOrder gas used 87540
+    ✔ Cancel decrease order (101ms)
+
+  OrderBook
+    ✔ setGov (60ms)
+    ✔ set* (40ms)
+    ✔ initialize, already initialized
+
+  OrderBook, increase position orders
+    ✔ createIncreaseOrder, bad input (251ms)
+    ✔ createIncreaseOrder, two orders (141ms)
+createIncreaseOrder gas used 399470
+    ✔ createIncreaseOrder, pay WETH (72ms)
+createIncreaseOrder gas used 372584
+    ✔ createIncreaseOrder, pay BNB (61ms)
+createIncreaseOrder gas used 423822
+    ✔ createIncreaseOrder, long A, transfer and purchase A (68ms)
+createIncreaseOrder gas used 667015
+    ✔ createIncreaseOrder, long A, transfer A, purchase B (158ms)
+createIncreaseOrder gas used 403946
+    ✔ createIncreaseOrder, short A, transfer B, purchase B (74ms)
+createIncreaseOrder gas used 647103
+    ✔ createIncreaseOrder, short A, transfer A, purchase B (150ms)
+updateIncreaseOrder gas used 46841
+    ✔ updateIncreaseOrder (97ms)
+cancelIncreaseOrder gas used 105635
+    ✔ cancelOrder (133ms)
+cancelIncreaseOrder gas used 91973
+    ✔ cancelOrder, pay BNB (253ms)
+    ✔ executeOrder, non-existent order
+    ✔ executeOrder, current price is invalid (1408ms)
+executeIncreaseOrder gas used 475789
+    ✔ executeOrder, long, purchase token same as collateral (252ms)
+    ✔ executOrder, 2 orders with the same position (467ms)
+executeIncreaseOrder gas used 641847
+    ✔ executeOrder, long, swap purchase token to collateral (350ms)
+executeIncreaseOrder gas used 504647
+    ✔ executeOrder, short, purchase token same as collateral (256ms)
+executeIncreaseOrder gas used 653370
+    ✔ executeOrder, short, swap purchase token to collateral (322ms)
+    ✔ executeOrder, short, pay BNB, no swap (299ms)
+executeIncreaseOrder gas used 650870
+    ✔ createIncreaseOrder, bad path
+
+  OrderBook, swap orders
+    ✔ createSwapOrder, bad input (132ms)
+createSwapOrder 349411
+    ✔ createSwapOrder, DAI -> BTC (66ms)
+createSwapOrder 325047
+    ✔ createSwapOrder, WBNB -> DAI (90ms)
+createSwapOrder 298161
+    ✔ createSwapOrder, BNB -> DAI (87ms)
+createSwapOrder 329535
+    ✔ createSwapOrder, DAI -> WBNB, shouldUnwrap = false (45ms)
+createSwapOrder 349435
+createSwapOrder 298135
+    ✔ createSwapOrder, two orders (92ms)
+canceSwapOrder 102573
+    ✔ cancelSwapOrder, tokenA != BNB (90ms)
+canceSwapOrder 88872
+    ✔ cancelSwapOrder, tokenA == BNB (72ms)
+updateSwapOrder 54761
+    ✔ updateSwapOrder (115ms)
+executeSwapOrder 367872
+    ✔ executeSwapOrder, triggerAboveThreshold == false (284ms)
+executeSwapOrder 320570
+    ✔ executeSwapOrder, triggerAboveThreshold == false, DAI -> WBNB, shouldUnwrap = false (191ms)
+executeSwapOrder 367336
+    ✔ executeSwapOrder, triggerAboveThreshold == true (253ms)
+executeSwapOrder 493504
+    ✔ executeSwapOrder, triggerAboveThreshold == true, BNB -> DAI -> BTC (343ms)
+executeSwapOrder 477266
+    ✔ executeSwapOrder, triggerAboveThreshold == true, USDG -> BTC (484ms)
+executeSwapOrder 488652
+    ✔ executeSwapOrder, triggerAboveThreshold == true, USDG -> DAI -> BTC (626ms)
+executeSwapOrder 511782
+    ✔ executeSwapOrder, triggerAboveThreshold == true, USDG -> BNB -> BTC (622ms)
+executeSwapOrder 312246
+    ✔ executeSwapOrder, triggerAboveThreshold == true, BTC -> USDG (314ms)
+    ✔ complex scenario (600ms)
+
+  PositionManager
+    ✔ inits
+    ✔ setDepositFee (51ms)
+    ✔ approve (47ms)
+    ✔ setOrderKeeper (64ms)
+    ✔ setLiquidator (52ms)
+    ✔ setPartner (196ms)
+    ✔ setInLegacyMode (72ms)
+    ✔ setShouldValidateIncreaseOrder (56ms)
+    ✔ increasePosition and decreasePosition (2309ms)
+    ✔ increasePositionETH and decreasePositionETH (1859ms)
+    ✔ increasePositionETH with swap (728ms)
+    ✔ increasePosition and increasePositionETH to short (761ms)
+    ✔ decreasePositionAndSwap and decreasePositionAndSwapETH (2158ms)
+    ✔ deposit collateral for shorts (663ms)
+    ✔ executeSwapOrder (441ms)
+    ✔ executeIncreaseOrder (3182ms)
+    ✔ executeDecreaseOrder (697ms)
+    ✔ liquidatePosition (682ms)
+
+  PositionManager next short data calculations
+    ✔ PositionManager and GlpManager init with shortsTracker
+    ✔ does not update shorts data if isGlobalShortDataReady == false (430ms)
+    ✔ updates global short sizes as Vault does (450ms)
+    ✔ updates global short average prices on position increases as Vault does (509ms)
+    ✔ updates global short average prices on position decreases (4669ms)
+    ✔ updates global short average prices on soft liquidation (1073ms)
+    ✔ updates global short average prices on hard liquidation (953ms)
+    ✔ updates global short average prices on hard liquidation with high borrow fee (995ms)
+    ✔ updates global short average prices on hard liquidation with borrow fee exceeds collateral (1000ms)
+    ✔ updates global short average prices on multiple hard liquidations (1433ms)
+    ✔ does not update global short average prices on deposits or withdrawals (1284ms)
+    ✔ aum should be the same after multiple increase/decrease shorts (2589ms)
+    ✔ executeIncreaseOrder updates global short data (778ms)
+    ✔ executeDecreaseOrder updates global short data (1248ms)
+
+Report prices with short tracker enabled:
+open position 490489
+increase position 412707
+decrease position 341110
+close position 327506
+
+Report prices with short tracker disabled:
+open position 481421
+increase position 403639
+decrease position 319517
+close position 305913
+
+Gas increase with short tracker:
+open position +9068 (+1.88%)
+increase position +9068 (+2.25%)
+decrease position +21593 (+6.76%)
+close position +21593 (+7.06%)
+    ✔ compare gas costs (2555ms)
+
+  PositionRouter
+    ✔ inits
+    ✔ setAdmin (60ms)
+    ✔ setDepositFee (49ms)
+    ✔ setIncreasePositionBufferBps (50ms)
+    ✔ setReferralStorage (51ms)
+    ✔ setMaxGlobalSizes (161ms)
+    ✔ withdrawFees (1129ms)
+    ✔ approve (51ms)
+    ✔ sendValue (42ms)
+    ✔ setPositionKeeper (71ms)
+    ✔ setCallbackGasLimit (50ms)
+    ✔ setCustomCallbackGasLimit (64ms)
+    ✔ setMinExecutionFee (56ms)
+    ✔ setIsLeverageEnabled (56ms)
+    ✔ setDelayValues (71ms)
+    ✔ setRequestKeysStartValues (58ms)
+    ✔ increasePosition acceptablePrice long (406ms)
+    ✔ increasePosition minOut long (369ms)
+    ✔ validateExecution (832ms)
+    ✔ validateCancellation (534ms)
+    ✔ maxGlobalLongSize (1128ms)
+    ✔ decreasePosition acceptablePrice long (701ms)
+    ✔ decreasePosition minOut long (1101ms)
+    ✔ increasePosition acceptablePrice short (381ms)
+    ✔ maxGlobalShortSize (1092ms)
+    ✔ decreasePosition acceptablePrice short (1107ms)
+createIncreasePosition gas used 509511
+executeIncreasePosition gas used 810785
+cancelIncreasePosition gas used 144332
+createIncreasePosition gas used 449557
+executeIncreasePosition gas used 622778
+    ✔ createIncreasePosition, executeIncreasePosition, cancelIncreasePosition (2947ms)
+createIncreasePositionETH gas used 467120
+executeIncreasePosition gas used 847451
+cancelIncreasePosition gas used 133320
+createIncreasePosition gas used 446991
+executeIncreasePosition gas used 564301
+    ✔ createIncreasePositionETH, executeIncreasePosition, cancelIncreasePosition (2791ms)
+createIncreasePosition gas used 509511
+executeIncreasePosition gas used 810773
+createDecreasePosition gas used 393536
+executeDecreasePosition gas used 454771
+executeDecreasePosition gas used 611924
+    ✔ createIncreasePosition, createDecreasePosition, executeDecreasePosition, cancelDecreasePosition (4590ms)
+    ✔ executeIncreasePositions, executeDecreasePositions (15900ms)
+    ✔ transfers ETH on decrease (949ms)
+path.length 1 indexToken 0x4d8bccb451bd9d3f28c888d40f18b0097f326874 minOut 0
+sizeDelta 1000000000000000000000000000000000 isLong true acceptablePrice 310000000000000000000000000000000
+executionFee 4000 callbackTarget 0x0000000000000000000000000000000000000000
+success: true reason: '2P1�du�]<�FY:X}}�p���
+                                            �eY��ԝ�^'
+    ✔ does not fail if transfer out eth fails, transfers weth instead (863ms)
+    ✔ deducts deposit fee (1321ms)
+    ✔ callback works (4132ms)
+    ✔ invalid callback is handled correctly (1097ms)
+    Updates short tracker data
+      ✔ executeIncreasePosition (936ms)
+      ✔ executeDecreasePosition (2443ms)
+
+  Router
+    ✔ setGov (67ms)
+    ✔ addPlugin (56ms)
+    ✔ removePlugin (82ms)
+    ✔ approvePlugin
+    ✔ denyPlugin (49ms)
+    ✔ pluginTransfer (130ms)
+    ✔ pluginIncreasePosition (135ms)
+    ✔ pluginDecreasePosition (89ms)
+buyUSDG gas used 354128
+    ✔ swap, buy USDG (240ms)
+sellUSDG gas used 354128
+    ✔ swap, sell USDG (484ms)
+swap gas used 356148
+    ✔ swap, path.length == 2 (464ms)
+swap gas used 394802
+    ✔ swap, path.length == 3 (1147ms)
+increasePosition gas used 670823
+    ✔ swap, increasePosition (913ms)
+    ✔ decreasePositionAndSwap (942ms)
+    ✔ decreasePositionAndSwapETH (850ms)
+
+  ShortsTracker
+    ✔ inits
+    ✔ getNextGlobalAveragePrice (174ms)
+    ✔ setIsGlobalShortDataReady (43ms)
+    ✔ setInitData (42ms)
+
+  Vault.averagePrice
+    ✔ position.averagePrice, buyPrice != markPrice (1919ms)
+    ✔ position.averagePrice, buyPrice == markPrice (2112ms)
+    ✔ position.averagePrice, buyPrice < averagePrice (1395ms)
+    ✔ long position.averagePrice, buyPrice == averagePrice (672ms)
+    ✔ long position.averagePrice, buyPrice > averagePrice (692ms)
+    ✔ long position.averagePrice, buyPrice < averagePrice (689ms)
+    ✔ long position.averagePrice, buyPrice < averagePrice + minProfitBasisPoints (730ms)
+    ✔ short position.averagePrice, buyPrice == averagePrice (574ms)
+    ✔ short position.averagePrice, buyPrice > averagePrice (1056ms)
+    ✔ short position.averagePrice, buyPrice < averagePrice (1021ms)
+    ✔ short position.averagePrice, buyPrice < averagePrice - minProfitBasisPoints (1135ms)
+    ✔ long position.averagePrice, buyPrice < averagePrice (625ms)
+
+  Vault.buyUSDG
+buyUSDG gas used 314559
+    ✔ buyUSDG (281ms)
+    ✔ buyUSDG allows gov to mint (223ms)
+    ✔ buyUSDG uses min price (234ms)
+    ✔ buyUSDG updates fees (429ms)
+    ✔ buyUSDG uses mintBurnFeeBasisPoints (242ms)
+    ✔ buyUSDG adjusts for decimals (231ms)
+
+  Vault.closeLongPosition
+decreasePosition gas used 229123
+    ✔ close long position (1066ms)
+decreasePosition gas used 229225
+    ✔ close long position with loss (796ms)
+
+  Vault.closeShortPosition
+decreasePosition gas used 232417
+    ✔ close short position (618ms)
+decreasePosition gas used 233554
+    ✔ close short position with loss (610ms)
+
+  Vault.decreaseLongPosition
+decreasePosition gas used 310992
+    ✔ decreasePosition long (1746ms)
+    ✔ decreasePosition long aum (1344ms)
+    ✔ decreasePosition long minProfitBasisPoints (729ms)
+decreasePosition gas used 259310
+    ✔ decreasePosition long with loss (1078ms)
+    ✔ decreasePosition negative collateral (896ms)
+
+  Vault.decreaseShortPosition
+decreasePosition gas used 311463
+    ✔ decreasePosition short (1658ms)
+    ✔ decreasePosition short minProfitBasisPoints (982ms)
+    ✔ decreasePosition short with loss (3128ms)
+
+  Vault.depositCollateral
+increasePosition gas used 386611
+deposit collateral gas used 220132
+    ✔ deposit collateral (2260ms)
+
+  Vault.settings
+    ✔ directPoolDeposit (148ms)
+
+  Vault.fundingRates
+decreasePosition gas used 308574
+withdraw collateral gas used 312636
+    ✔ funding rate (1165ms)
+
+  Vault.getFeeBasisPoints
+    ✔ getFeeBasisPoints (1107ms)
+
+  Vault.getPrice
+    ✔ getPrice (422ms)
+    ✔ includes AMM price (679ms)
+
+  Vault.increaseLongPosition
+    ✔ increasePosition long validations (1393ms)
+increasePosition gas used 386611
+    ✔ increasePosition long (1806ms)
+increasePosition gas used 386712
+    ✔ increasePosition long aum (1174ms)
+
+  Vault.increaseShortPosition
+    ✔ increasePosition short validations (1151ms)
+increasePosition gas used 400210
+    ✔ increasePosition short (3788ms)
+
+  Vault.liquidateLongPosition
+liquidatePosition gas used 227562
+    ✔ liquidate long (2048ms)
+liquidatePosition gas used 248384
+    ✔ automatic stop-loss (1616ms)
+liquidatePosition gas used 225384
+    ✔ excludes AMM price (1031ms)
+
+  Vault.liquidateShortPosition
+liquidatePosition gas used 228412
+    ✔ liquidate short (1532ms)
+liquidatePosition gas used 252607
+    ✔ automatic stop-loss (1830ms)
+liquidatePosition gas used 227170
+    ✔ global AUM (1697ms)
+
+  Vault.sellUSDG
+sellUSDG gas used 222604
+    ✔ sellUSDG (1072ms)
+    ✔ sellUSDG after a price increase (523ms)
+    ✔ sellUSDG redeem based on price (505ms)
+    ✔ sellUSDG for stableTokens (791ms)
+
+  Vault.settings
+    ✔ inits (41ms)
+    ✔ setVaultUtils (56ms)
+    ✔ setMaxGlobalShortSize (77ms)
+    ✔ setInManagerMode (51ms)
+    ✔ setManager (143ms)
+    ✔ setInPrivateLiquidationMode (184ms)
+    ✔ setIsSwapEnabled (56ms)
+    ✔ setIsLeverageEnabled (61ms)
+    ✔ setMaxGasPrice (55ms)
+    ✔ setGov (63ms)
+    ✔ setPriceFeed (56ms)
+    ✔ setMaxLeverage (71ms)
+    ✔ setBufferAmount (52ms)
+    ✔ setFees (121ms)
+    ✔ setFundingRate (167ms)
+    ✔ setTokenConfig (282ms)
+    ✔ clearTokenConfig (249ms)
+    ✔ addRouter
+    ✔ removeRouter (50ms)
+    ✔ setUsdgAmount (226ms)
+    ✔ upgradeVault (73ms)
+    ✔ setErrorController (141ms)
+
+  Vault.swap
+swap gas used 259569
+    ✔ swap (1450ms)
+    ✔ caps max USDG amount (725ms)
+    ✔ does not cap max USDG debt (480ms)
+    ✔ ensures poolAmount >= buffer (463ms)
+
+  Vault.withdrawCollateral
+decreasePosition gas used 308598
+withdraw collateral gas used 247244
+    ✔ withdraw collateral (1060ms)
+    ✔ withdraw during cooldown duration (2103ms)
+    ✔ withdraw collateral long (2451ms)
+    ✔ withdraw collateral short (1693ms)
+
+  Vault.withdrawFees
+    ✔ withdrawFees (655ms)
+    ✔ withdrawFees using timelock (762ms)
+    ✔ batchWithdrawFees using timelock (718ms)
+
+  GMT
+    ✔ inits
+    ✔ setGov (54ms)
+    ✔ addAdmin
+    ✔ removeAdmin (45ms)
+    ✔ setNextMigrationTime (56ms)
+    ✔ beginMigration (131ms)
+    ✔ addBlockedRecipient
+    ✔ removeBlockedRecipient (49ms)
+    ✔ addMsgSender
+    ✔ removeMsgSender (48ms)
+    ✔ withdrawToken (120ms)
+    ✔ transfer (49ms)
+    ✔ approve
+    ✔ transferFrom (80ms)
+    ✔ allows migrations (140ms)
+
+  Treasury
+    ✔ initialize (71ms)
+    ✔ setGov (55ms)
+    ✔ setFund (38ms)
+    ✔ extendUnlockTime (41ms)
+    ✔ addWhitelists (61ms)
+    ✔ removeWhitelists (90ms)
+    ✔ updateWhitelist (92ms)
+    ✔ swap (301ms)
+    ✔ validates swap.busdSlotCap (249ms)
+    ✔ validates swap.busdHardCap (177ms)
+    ✔ validates swap.isSwapActive (111ms)
+    ✔ addLiquidity (210ms)
+    ✔ withdrawToken (61ms)
+    ✔ increaseBusdBasisPoints (133ms)
+    ✔ endSwap
+
+  FastPriceFeed
+    ✔ inits (65ms)
+    ✔ setSigner (50ms)
+    ✔ setUpdater (53ms)
+    ✔ setFastPriceEvents (49ms)
+    ✔ setVaultPriceFeed (53ms)
+    ✔ setMaxTimeDeviation (56ms)
+    ✔ setPriceDuration (64ms)
+    ✔ setMaxPriceUpdateDelay (50ms)
+    ✔ setSpreadBasisPointsIfInactive (53ms)
+    ✔ setSpreadBasisPointsIfChainError (55ms)
+    ✔ setMinBlockInterval (53ms)
+    ✔ setIsSpreadEnabled (62ms)
+    ✔ setTokenManager (188ms)
+    ✔ setMaxDeviationBasisPoints (98ms)
+    ✔ setMaxCumulativeDeltaDiffs (63ms)
+    ✔ setPriceDataInterval (47ms)
+    ✔ setMinAuthorizations (49ms)
+    ✔ setLastUpdatedAt (56ms)
+    ✔ setPrices (200ms)
+    ✔ favorFastPrice (227ms)
+    ✔ getPrice (527ms)
+    ✔ setTokens (163ms)
+    ✔ setCompactedPrices (1056ms)
+tx0 setPricesWithBits gas used 146306
+tx1 setPricesWithBits gas used 222804
+    ✔ setPricesWithBits (986ms)
+tx0 setPrices gas used 108064
+tx1 setPrices gas used 93594
+tx2 setPrices gas used 82793
+tx3 setPrices gas used 84999
+    ✔ price data check (402ms)
+
+  BatchSender
+    ✔ setHandler (189ms)
+
+  GmxTimelock
+    ✔ inits (97ms)
+    ✔ setTokenConfig (292ms)
+    ✔ setBuffer (133ms)
+    ✔ setIsAmmEnabled (50ms)
+    ✔ setMaxStrictPriceDeviation (43ms)
+    ✔ setPriceSampleSpace (47ms)
+    ✔ setVaultUtils (51ms)
+    ✔ setIsSwapEnabled (48ms)
+    ✔ setContractHandler (45ms)
+    ✔ setIsLeverageEnabled (243ms)
+    ✔ setMaxGlobalShortSize (47ms)
+    ✔ setMaxGasPrice (46ms)
+    ✔ setMaxLeverage (64ms)
+    ✔ setFundingRate (109ms)
+    ✔ transferIn (111ms)
+    ✔ approve (438ms)
+    ✔ processMint (378ms)
+    ✔ setGov (773ms)
+    ✔ setPriceFeed (667ms)
+    ✔ withdrawToken (326ms)
+    ✔ vaultSetTokenConfig (315ms)
+    ✔ priceFeedSetTokenConfig (640ms)
+    ✔ addPlugin (275ms)
+    ✔ addExcludedToken (89ms)
+    ✔ setInPrivateTransferMode (273ms)
+    ✔ setAdmin
+    ✔ setExternalAdmin (109ms)
+    ✔ setInPrivateLiquidationMode (68ms)
+    ✔ setLiquidator (192ms)
+    ✔ redeemUsdg (633ms)
+
+  OrderBookReader
+    ✔ getIncreaseOrders (137ms)
+    ✔ getDecreaseOrders (81ms)
+    ✔ getSwapOrders (114ms)
+
+  PriceFeedTimelock
+    ✔ inits
+    ✔ setAdmin (119ms)
+    ✔ setExternalAdmin (100ms)
+    ✔ setContractHandler (46ms)
+    ✔ setKeeper (45ms)
+    ✔ setBuffer (134ms)
+    ✔ setIsAmmEnabled (47ms)
+    ✔ setMaxStrictPriceDeviation (47ms)
+    ✔ setPriceSampleSpace (45ms)
+    ✔ setVaultPriceFeed (56ms)
+    ✔ setPriceDuration (50ms)
+    ✔ setMaxPriceUpdateDelay (49ms)
+    ✔ setSpreadBasisPointsIfInactive (45ms)
+    ✔ setSpreadBasisPointsIfChainError (47ms)
+    ✔ transferIn (114ms)
+    ✔ approve (456ms)
+    ✔ setGov (292ms)
+    ✔ withdrawToken (316ms)
+    ✔ setPriceFeedWatcher (211ms)
+    ✔ setPriceFeedUpdater (212ms)
+    ✔ priceFeedSetTokenConfig (342ms)
+
+  Reader
+    ✔ getVaultTokenInfo (187ms)
+
+  ShortsTracker
+    ✔ inits
+    ✔ setBuffer (52ms)
+    ✔ setAdmin (92ms)
+    ✔ setContractHandler (43ms)
+    ✔ setGov (94ms)
+    ✔ setAveragePriceUpdateDelay (78ms)
+    ✔ setMaxAveragePriceChange (79ms)
+    ✔ setIsGlobalShortDataReady (84ms)
+    ✔ disableIsGlobalShortDataReady (79ms)
+    ✔ setGlobalShortAveragePrices (267ms)
+    ✔ setHandler (307ms)
+
+  Timelock
+    ✔ inits (78ms)
+    ✔ setTokenConfig (342ms)
+    ✔ setUsdgAmounts (63ms)
+    ✔ updateUsdgSupply (144ms)
+    ✔ setBuffer (131ms)
+    ✔ setVaultUtils (50ms)
+    ✔ setIsSwapEnabled (48ms)
+    ✔ setContractHandler (365ms)
+    ✔ initGlpManager (89ms)
+    ✔ initRewardRouter (91ms)
+    ✔ setKeeper (51ms)
+    ✔ setIsLeverageEnabled (84ms)
+    ✔ setMaxGlobalShortSize (50ms)
+    ✔ setMaxGasPrice (47ms)
+    ✔ setMaxLeverage (75ms)
+    ✔ setFundingRate (161ms)
+    ✔ transferIn (111ms)
+    ✔ approve (496ms)
+    ✔ processMint (422ms)
+    ✔ setHandler (409ms)
+    ✔ setGov (289ms)
+    ✔ setPriceFeed (304ms)
+    ✔ withdrawToken (329ms)
+    ✔ vaultSetTokenConfig (315ms)
+    ✔ setInPrivateTransferMode (243ms)
+    ✔ batchSetBonusRewards (134ms)
+    ✔ setAdmin
+    ✔ setExternalAdmin (105ms)
+    ✔ setShouldToggleIsLeverageEnabled (90ms)
+    ✔ setMarginFeeBasisPoints (86ms)
+    ✔ setFees (215ms)
+    ✔ setSwapFees (263ms)
+    ✔ toggle leverage (271ms)
+    ✔ setInPrivateLiquidationMode (76ms)
+    ✔ setLiquidator (220ms)
+    ✔ redeemUsdg (625ms)
+    ✔ setShortsTrackerAveragePriceWeight (47ms)
+    ✔ setGlpCooldownDuration (62ms)
+
+  ReferralStorage
+    ✔ Sets new handler (65ms)
+    ✔ setTier (55ms)
+    ✔ setReferrerTier
+    ✔ setReferrerDiscountShare (39ms)
+    ✔ setTraderReferralCode (77ms)
+    ✔ Registers code (92ms)
+    ✔ setCodeOwner (81ms)
+    ✔ govSetCodeOwner (81ms)
+    ✔ getTraderReferralInfo (59ms)
+    ✔ timelock.setTier (69ms)
+    ✔ timelock.setReferrerTier (71ms)
+    ✔ timelock.govSetCodeOwner (72ms)
+
+  BonusDistributor
+    ✔ distributes bonus (486ms)
+
+  RewardRouter
+    ✔ inits (55ms)
+compound gas used 614667
+batchCompoundForAccounts gas used 847217
+    ✔ stakeGmxForAccount, stakeGmx, stakeEsGmx, unstakeGmx, unstakeEsGmx, claimEsGmx, claimFees, compound, batchCompoundForAccounts (2812ms)
+mintAndStakeGlp gas used 957221
+unstakeAndRedeemGlp gas used 650565
+compound gas used 629940
+batchCompoundForAccounts gas used 650565
+    ✔ mintAndStakeGlp, unstakeAndRedeemGlp, compound, batchCompoundForAccounts (2104ms)
+    ✔ mintAndStakeGlpETH, unstakeAndRedeemGlpETH (1900ms)
+
+  RewardRouterV2
+    ✔ inits (67ms)
+compound gas used 615073
+batchCompoundForAccounts gas used 847656
+    ✔ stakeGmxForAccount, stakeGmx, stakeEsGmx, unstakeGmx, unstakeEsGmx, claimEsGmx, claimFees, compound, batchCompoundForAccounts (3052ms)
+mintAndStakeGlp gas used 957265
+unstakeAndRedeemGlp gas used 650565
+compound gas used 630346
+batchCompoundForAccounts gas used 650565
+    ✔ mintAndStakeGlp, unstakeAndRedeemGlp, compound, batchCompoundForAccounts (2300ms)
+    ✔ mintAndStakeGlpETH, unstakeAndRedeemGlpETH (1321ms)
+    ✔ gmx: signalTransfer, acceptTransfer (2567ms)
+    ✔ gmx, glp: signalTransfer, acceptTransfer (7034ms)
+    ✔ handleRewards (1865ms)
+    ✔ StakedGlp (1833ms)
+    ✔ FeeGlp (1000ms)
+
+  RewardTracker
+    ✔ inits (44ms)
+    ✔ setDepositToken (76ms)
+    ✔ setInPrivateTransferMode (54ms)
+    ✔ setInPrivateStakingMode (52ms)
+    ✔ setHandler (54ms)
+    ✔ withdrawToken (80ms)
+    ✔ stake, unstake, claim (1454ms)
+    ✔ stakeForAccount, unstakeForAccount, claimForAccount (638ms)
+
+  Vester
+    ✔ inits (91ms)
+    ✔ setTransferredAverageStakedAmounts (87ms)
+    ✔ setTransferredCumulativeRewards (84ms)
+    ✔ setCumulativeRewardDeductions (86ms)
+    ✔ setBonusRewards (89ms)
+    ✔ deposit, claim, withdraw (970ms)
+    ✔ depositForAccount, claimForAccount (470ms)
+    ✔ handles multiple deposits (513ms)
+    ✔ handles pairing (2556ms)
+    ✔ handles existing pair tokens (1887ms)
+
+  Bridge
+    ✔ wrap, unwrap (298ms)
+    ✔ withdrawToken (109ms)
+
+  TimeDistributor
+    ✔ distribute (300ms)
+
+  USDG
+    ✔ addVault (52ms)
+    ✔ removeVault (78ms)
+    ✔ mint (93ms)
+    ✔ burn (115ms)
+
+  YieldFarm
+    ✔ stake (89ms)
+    ✔ unstake (97ms)
+
+  YieldToken
+tranfer0 gas used 60894
+tranfer1 gas used 128552
+tranfer2 gas used 275132
+tranfer3 gas used 129710
+    ✔ claim (446ms)
+    ✔ nonStakingAccounts (740ms)
+
+
+  470 passing (12m)

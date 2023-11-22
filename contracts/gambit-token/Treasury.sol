@@ -9,7 +9,7 @@ import "../libraries/utils/ReentrancyGuard.sol";
 import "../amm/interfaces/IPancakeRouter.sol";
 import "./interfaces/IGMT.sol";
 import "../peripherals/interfaces/ITimelockTarget.sol";
-
+//财政部
 contract Treasury is ReentrancyGuard, ITimelockTarget {
     using SafeMath for uint256;
 

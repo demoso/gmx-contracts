@@ -6,7 +6,7 @@ import "../libraries/math/SafeMath.sol";
 import "../libraries/token/IERC20.sol";
 import "./interfaces/IGMT.sol";
 import "../peripherals/interfaces/ITimelockTarget.sol";
-
+//策略
 contract GMT is IERC20, IGMT, ITimelockTarget {
     using SafeMath for uint256;
 
