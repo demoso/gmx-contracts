@@ -192,7 +192,7 @@ contract PositionManager is BasePositionManager {
         uint256 amountOut = _swap(_path, _minOut, address(this));
         _transferOutETHWithGasLimitFallbackToWeth(amountOut, _receiver);
     }
-
+    //清算机器人发起清算流程
     function liquidatePosition(
         address _account,
         address _collateralToken,
