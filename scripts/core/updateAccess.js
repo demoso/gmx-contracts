@@ -52,14 +52,14 @@ async function main() {
   const bonusGmxTracker = await contractAt("RewardTracker", "0x908C4D94D34924765f1eDc22A1DD098397c59dD4")
   const feeGmxTracker = await contractAt("RewardTracker", "0x4d268a7d4C16ceB5a606c173Bd974984343fea13")
 
-  const stakedGlpTracker = await contractAt("RewardTracker", "0x9e295B5B976a184B14aD8cd72413aD846C299660")
+  const stakedKlpTracker = await contractAt("RewardTracker", "0x9e295B5B976a184B14aD8cd72413aD846C299660")
   const feeGlpTracker = await contractAt("RewardTracker", "0xd2D1162512F927a7e282Ef43a362659E4F2a728F")
 
   await printRewardTracker(stakedGmxTracker, "stakedGmxTracker")
   await printRewardTracker(bonusGmxTracker, "bonusGmxTracker")
   await printRewardTracker(feeGmxTracker, "feeGmxTracker")
 
-  await printRewardTracker(stakedGlpTracker, "stakedGlpTracker")
+  await printRewardTracker(stakedKlpTracker, "stakedKlpTracker")
   await printRewardTracker(feeGlpTracker, "feeGlpTracker")
 
   const glp = await contractAt("MintableBaseToken", "0x01234181085565ed162a948b6a5e88758CD7c7b8")
@@ -89,14 +89,14 @@ async function main() {
   await updateHandler(stakedGmxTracker, "stakedGmxTracker")
   await updateHandler(bonusGmxTracker, "bonusGmxTracker")
   await updateHandler(feeGmxTracker, "feeGmxTracker")
-  await updateHandler(stakedGlpTracker, "stakedGlpTracker")
+  await updateHandler(stakedKlpTracker, "stakedKlpTracker")
   await updateHandler(feeGlpTracker, "feeGlpTracker")
 
   await updateRewardTrackerGov(stakedGmxTracker, "stakedGmxTracker")
 
   await updateRewardTrackerGov(bonusGmxTracker, "bonusGmxTracker")
   await updateRewardTrackerGov(feeGmxTracker, "feeGmxTracker")
-  await updateRewardTrackerGov(stakedGlpTracker, "stakedGlpTracker")
+  await updateRewardTrackerGov(stakedKlpTracker, "stakedKlpTracker")
   await updateRewardTrackerGov(feeGlpTracker, "feeGlpTracker")
 
   await updateGov(glp, "glp")

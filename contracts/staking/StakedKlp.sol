@@ -13,31 +13,31 @@ import "./interfaces/IRewardTracker.sol";
 // provide a way to transfer staked GLP tokens by unstaking from the sender
 // and staking for the receiver
 // tests in RewardRouterV2.js
-contract StakedGlp {
+contract StakedKlp {
     using SafeMath for uint256;
 
-    string public constant name = "StakedGlp";
-    string public constant symbol = "sGLP";
+    string public constant name = "StakedKlp";
+    string public constant symbol = "sKLP";
     uint8 public constant decimals = 18;
 
     address public glp;
     IKlpManager public klpManager;
-    address public stakedGlpTracker;
+    address public stakedKlpTracker;
     address public feeGlpTracker;
 
-    mapping (address => mapping (address => uint256)) public allowances;
+    mapping(address => mapping(address => uint256)) public allowances;
 
     event Approval(address indexed owner, address indexed spender, uint256 value);
 
     constructor(
         address _glp,
         IKlpManager _klpManager,
-        address _stakedGlpTracker,
+        address _stakedKlpTracker,
         address _feeGlpTracker
     ) public {
         glp = _glp;
         klpManager = _klpManager;
-        stakedGlpTracker = _stakedGlpTracker;
+        stakedKlpTracker = _stakedKlpTracker;
         feeGlpTracker = _feeGlpTracker;
     }
 
@@ -56,7 +56,7 @@ contract StakedGlp {
     }
 
     function transferFrom(address _sender, address _recipient, uint256 _amount) external returns (bool) {
-        uint256 nextAllowance = allowances[_sender][msg.sender].sub(_amount, "StakedGlp: transfer amount exceeds allowance");
+        uint256 nextAllowance = allowances[_sender][msg.sender].sub(_amount, "StakedKlp: transfer amount exceeds allowance");
         _approve(_sender, msg.sender, nextAllowance);
         _transfer(_sender, _recipient, _amount);
         return true;
@@ -67,12 +67,12 @@ contract StakedGlp {
     }
 
     function totalSupply() external view returns (uint256) {
-        return IERC20(stakedGlpTracker).totalSupply();
+        return IERC20(stakedKlpTracker).totalSupply();
     }
 
     function _approve(address _owner, address _spender, uint256 _amount) private {
-        require(_owner != address(0), "StakedGlp: approve from the zero address");
-        require(_spender != address(0), "StakedGlp: approve to the zero address");
+        require(_owner != address(0), "StakedKlp: approve from the zero address");
+        require(_spender != address(0), "StakedKlp: approve to the zero address");
 
         allowances[_owner][_spender] = _amount;
 
@@ -80,18 +80,18 @@ contract StakedGlp {
     }
 
     function _transfer(address _sender, address _recipient, uint256 _amount) private {
-        require(_sender != address(0), "StakedGlp: transfer from the zero address");
-        require(_recipient != address(0), "StakedGlp: transfer to the zero address");
+        require(_sender != address(0), "StakedKlp: transfer from the zero address");
+        require(_recipient != address(0), "StakedKlp: transfer to the zero address");
 
         require(
             klpManager.lastAddedAt(_sender).add(klpManager.cooldownDuration()) <= block.timestamp,
-            "StakedGlp: cooldown duration not yet passed"
+            "StakedKlp: cooldown duration not yet passed"
         );
 
-        IRewardTracker(stakedGlpTracker).unstakeForAccount(_sender, feeGlpTracker, _amount, _sender);
+        IRewardTracker(stakedKlpTracker).unstakeForAccount(_sender, feeGlpTracker, _amount, _sender);
         IRewardTracker(feeGlpTracker).unstakeForAccount(_sender, glp, _amount, _sender);
 
         IRewardTracker(feeGlpTracker).stakeForAccount(_sender, _recipient, glp, _amount);
-        IRewardTracker(stakedGlpTracker).stakeForAccount(_recipient, _recipient, feeGlpTracker, _amount);
+        IRewardTracker(stakedKlpTracker).stakeForAccount(_recipient, _recipient, feeGlpTracker, _amount);
     }
 }

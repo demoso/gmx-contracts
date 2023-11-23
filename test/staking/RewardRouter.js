@@ -43,8 +43,8 @@ describe("RewardRouter", function () {
 
   let feeGlpTracker
   let feeGlpDistributor
-  let stakedGlpTracker
-  let stakedGlpDistributor
+  let stakedKlpTracker
+  let stakedKlpDistributor
 
   let rewardRouter
 
@@ -117,10 +117,10 @@ describe("RewardRouter", function () {
     await feeGlpTracker.initialize([glp.address], feeGlpDistributor.address)
     await feeGlpDistributor.updateLastDistributionTime()
 
-    stakedGlpTracker = await deployContract("RewardTracker", ["Fee + Staked GLP", "fsGLP"])
-    stakedGlpDistributor = await deployContract("RewardDistributor", [esGmx.address, stakedGlpTracker.address])
-    await stakedGlpTracker.initialize([feeGlpTracker.address], stakedGlpDistributor.address)
-    await stakedGlpDistributor.updateLastDistributionTime()
+    stakedKlpTracker = await deployContract("RewardTracker", ["Fee + Staked GLP", "fsGLP"])
+    stakedKlpDistributor = await deployContract("RewardDistributor", [esGmx.address, stakedKlpTracker.address])
+    await stakedKlpTracker.initialize([feeGlpTracker.address], stakedKlpDistributor.address)
+    await stakedKlpDistributor.updateLastDistributionTime()
 
     await stakedGmxTracker.setInPrivateTransferMode(true)
     await stakedGmxTracker.setInPrivateStakingMode(true)
@@ -132,8 +132,8 @@ describe("RewardRouter", function () {
 
     await feeGlpTracker.setInPrivateTransferMode(true)
     await feeGlpTracker.setInPrivateStakingMode(true)
-    await stakedGlpTracker.setInPrivateTransferMode(true)
-    await stakedGlpTracker.setInPrivateStakingMode(true)
+    await stakedKlpTracker.setInPrivateTransferMode(true)
+    await stakedKlpTracker.setInPrivateStakingMode(true)
 
     rewardRouter = await deployContract("RewardRouter", [])
     await rewardRouter.initialize(
@@ -146,7 +146,7 @@ describe("RewardRouter", function () {
       bonusGmxTracker.address,
       feeGmxTracker.address,
       feeGlpTracker.address,
-      stakedGlpTracker.address,
+      stakedKlpTracker.address,
       klpManager.address
     )
 
@@ -170,10 +170,10 @@ describe("RewardRouter", function () {
     await klpManager.setHandler(rewardRouter.address, true)
     // allow rewardRouter to stake in feeGlpTracker
     await feeGlpTracker.setHandler(rewardRouter.address, true)
-    // allow stakedGlpTracker to stake feeGlpTracker
-    await feeGlpTracker.setHandler(stakedGlpTracker.address, true)
-    // allow rewardRouter to sake in stakedGlpTracker
-    await stakedGlpTracker.setHandler(rewardRouter.address, true)
+    // allow stakedKlpTracker to stake feeGlpTracker
+    await feeGlpTracker.setHandler(stakedKlpTracker.address, true)
+    // allow rewardRouter to sake in stakedKlpTracker
+    await stakedKlpTracker.setHandler(rewardRouter.address, true)
     // allow feeGlpTracker to stake glp
     await glp.setHandler(feeGlpTracker.address, true)
 
@@ -181,14 +181,14 @@ describe("RewardRouter", function () {
     await esGmx.setMinter(wallet.address, true)
     await esGmx.mint(stakedGmxDistributor.address, expandDecimals(50000, 18))
     await stakedGmxDistributor.setTokensPerInterval("20667989410000000") // 0.02066798941 esGmx per second
-    await esGmx.mint(stakedGlpDistributor.address, expandDecimals(50000, 18))
-    await stakedGlpDistributor.setTokensPerInterval("20667989410000000") // 0.02066798941 esGmx per second
+    await esGmx.mint(stakedKlpDistributor.address, expandDecimals(50000, 18))
+    await stakedKlpDistributor.setTokensPerInterval("20667989410000000") // 0.02066798941 esGmx per second
 
     await esGmx.setInPrivateTransferMode(true)
     await esGmx.setHandler(stakedGmxDistributor.address, true)
-    await esGmx.setHandler(stakedGlpDistributor.address, true)
+    await esGmx.setHandler(stakedKlpDistributor.address, true)
     await esGmx.setHandler(stakedGmxTracker.address, true)
-    await esGmx.setHandler(stakedGlpTracker.address, true)
+    await esGmx.setHandler(stakedKlpTracker.address, true)
     await esGmx.setHandler(rewardRouter.address, true)
 
     // mint bnGmx for distributor
@@ -211,7 +211,7 @@ describe("RewardRouter", function () {
     expect(await rewardRouter.feeGmxTracker()).eq(feeGmxTracker.address)
 
     expect(await rewardRouter.feeGlpTracker()).eq(feeGlpTracker.address)
-    expect(await rewardRouter.stakedGlpTracker()).eq(stakedGlpTracker.address)
+    expect(await rewardRouter.stakedKlpTracker()).eq(stakedKlpTracker.address)
 
     expect(await rewardRouter.klpManager()).eq(klpManager.address)
 
@@ -225,7 +225,7 @@ describe("RewardRouter", function () {
       bonusGmxTracker.address,
       feeGmxTracker.address,
       feeGlpTracker.address,
-      stakedGlpTracker.address,
+      stakedKlpTracker.address,
       klpManager.address
     )).to.be.revertedWith("RewardRouter: already initialized")
   })
@@ -434,8 +434,8 @@ describe("RewardRouter", function () {
     expect(await feeGlpTracker.stakedAmounts(user1.address)).eq(expandDecimals(2991, 17))
     expect(await feeGlpTracker.depositBalances(user1.address, glp.address)).eq(expandDecimals(2991, 17))
 
-    expect(await stakedGlpTracker.stakedAmounts(user1.address)).eq(expandDecimals(2991, 17))
-    expect(await stakedGlpTracker.depositBalances(user1.address, feeGlpTracker.address)).eq(expandDecimals(2991, 17))
+    expect(await stakedKlpTracker.stakedAmounts(user1.address)).eq(expandDecimals(2991, 17))
+    expect(await stakedKlpTracker.depositBalances(user1.address, feeGlpTracker.address)).eq(expandDecimals(2991, 17))
 
     await bnb.mint(user1.address, expandDecimals(2, 18))
     await bnb.connect(user1).approve(klpManager.address, expandDecimals(2, 18))
@@ -452,8 +452,8 @@ describe("RewardRouter", function () {
     expect(await feeGlpTracker.claimable(user1.address)).gt("3560000000000000000") // 3.56, 100 / 28 => ~3.57
     expect(await feeGlpTracker.claimable(user1.address)).lt("3580000000000000000") // 3.58
 
-    expect(await stakedGlpTracker.claimable(user1.address)).gt(expandDecimals(1785, 18)) // 50000 / 28 => ~1785
-    expect(await stakedGlpTracker.claimable(user1.address)).lt(expandDecimals(1786, 18))
+    expect(await stakedKlpTracker.claimable(user1.address)).gt(expandDecimals(1785, 18)) // 50000 / 28 => ~1785
+    expect(await stakedKlpTracker.claimable(user1.address)).lt(expandDecimals(1786, 18))
 
     await bnb.mint(user2.address, expandDecimals(1, 18))
     await bnb.connect(user2).approve(klpManager.address, expandDecimals(1, 18))
@@ -472,7 +472,7 @@ describe("RewardRouter", function () {
     )).to.be.revertedWith("KlpManager: cooldown duration not yet passed")
 
     expect(await feeGlpTracker.stakedAmounts(user1.address)).eq("897300000000000000000") // 897.3
-    expect(await stakedGlpTracker.stakedAmounts(user1.address)).eq("897300000000000000000")
+    expect(await stakedKlpTracker.stakedAmounts(user1.address)).eq("897300000000000000000")
     expect(await bnb.balanceOf(user1.address)).eq(0)
 
     const tx1 = await rewardRouter.connect(user1).unstakeAndRedeemGlp(
@@ -484,7 +484,7 @@ describe("RewardRouter", function () {
     await reportGasUsed(provider, tx1, "unstakeAndRedeemGlp gas used")
 
     expect(await feeGlpTracker.stakedAmounts(user1.address)).eq("598300000000000000000") // 598.3
-    expect(await stakedGlpTracker.stakedAmounts(user1.address)).eq("598300000000000000000")
+    expect(await stakedKlpTracker.stakedAmounts(user1.address)).eq("598300000000000000000")
     expect(await bnb.balanceOf(user1.address)).eq("993676666666666666") // ~0.99
 
     await increaseTime(provider, 24 * 60 * 60)
@@ -495,10 +495,10 @@ describe("RewardRouter", function () {
     expect(await feeGlpTracker.claimable(user2.address)).gt("1180000000000000000") // 1.18, 100 / 28 / 3 => ~1.19
     expect(await feeGlpTracker.claimable(user2.address)).lt("1200000000000000000")
 
-    expect(await stakedGlpTracker.claimable(user1.address)).gt(expandDecimals(1785 + 1190, 18))
-    expect(await stakedGlpTracker.claimable(user1.address)).lt(expandDecimals(1786 + 1191, 18))
-    expect(await stakedGlpTracker.claimable(user2.address)).gt(expandDecimals(595, 18))
-    expect(await stakedGlpTracker.claimable(user2.address)).lt(expandDecimals(596, 18))
+    expect(await stakedKlpTracker.claimable(user1.address)).gt(expandDecimals(1785 + 1190, 18))
+    expect(await stakedKlpTracker.claimable(user1.address)).lt(expandDecimals(1786 + 1191, 18))
+    expect(await stakedKlpTracker.claimable(user2.address)).gt(expandDecimals(595, 18))
+    expect(await stakedKlpTracker.claimable(user2.address)).lt(expandDecimals(596, 18))
 
     expect(await esGmx.balanceOf(user1.address)).eq(0)
     await rewardRouter.connect(user1).claimEsGmx()
@@ -549,7 +549,7 @@ describe("RewardRouter", function () {
     expect(await feeGmxTracker.depositBalances(user1.address, bnGmx.address)).lt("13100000000000000000") // 13.1
 
     expect(await feeGlpTracker.stakedAmounts(user1.address)).eq("598300000000000000000") // 598.3
-    expect(await stakedGlpTracker.stakedAmounts(user1.address)).eq("598300000000000000000")
+    expect(await stakedKlpTracker.stakedAmounts(user1.address)).eq("598300000000000000000")
     expect(await bnb.balanceOf(user1.address)).eq("993676666666666666") // ~0.99
   })
 
@@ -568,7 +568,7 @@ describe("RewardRouter", function () {
     expect(await bnb.balanceOf(vault.address)).eq(0)
     expect(await bnb.totalSupply()).eq(0)
     expect(await provider.getBalance(bnb.address)).eq(0)
-    expect(await stakedGlpTracker.balanceOf(user0.address)).eq(0)
+    expect(await stakedKlpTracker.balanceOf(user0.address)).eq(0)
 
     await rewardRouter.connect(user0).mintAndStakeGlpETH(expandDecimals(299, 18), expandDecimals(299, 18), {value: expandDecimals(1, 18)})
 
@@ -576,7 +576,7 @@ describe("RewardRouter", function () {
     expect(await bnb.balanceOf(vault.address)).eq(expandDecimals(1, 18))
     expect(await provider.getBalance(bnb.address)).eq(expandDecimals(1, 18))
     expect(await bnb.totalSupply()).eq(expandDecimals(1, 18))
-    expect(await stakedGlpTracker.balanceOf(user0.address)).eq("299100000000000000000") // 299.1
+    expect(await stakedKlpTracker.balanceOf(user0.address)).eq("299100000000000000000") // 299.1
 
     await expect(rewardRouter.connect(user0).unstakeAndRedeemGlpETH(expandDecimals(300, 18), expandDecimals(1, 18), receiver0.address))
       .to.be.revertedWith("RewardTracker: _amount exceeds stakedAmount")

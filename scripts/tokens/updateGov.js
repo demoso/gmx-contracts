@@ -23,7 +23,7 @@ async function getArbValues() {
     ["bonusGmxTracker", "0x4d268a7d4C16ceB5a606c173Bd974984343fea13"],
     ["feeGmxTracker", "0xd2D1162512F927a7e282Ef43a362659E4F2a728F"],
     ["feeGlpTracker", "0x4e971a87900b931fF39d1Aad67697F49835400b6"],
-    ["stakedGlpTracker", "0x1aDDD80E6039594eE970E5872D247bf0414C8903"],
+    ["stakedKlpTracker", "0x1aDDD80E6039594eE970E5872D247bf0414C8903"],
   ]
 
   return { vault, addresses, trackers }
@@ -49,7 +49,7 @@ async function getAvaxValues() {
     ["bonusGmxTracker", "0x908C4D94D34924765f1eDc22A1DD098397c59dD4"],
     ["feeGmxTracker", "0x4d268a7d4C16ceB5a606c173Bd974984343fea13"],
     ["feeGlpTracker", "0xd2D1162512F927a7e282Ef43a362659E4F2a728F"],
-    ["stakedGlpTracker", "0x9e295B5B976a184B14aD8cd72413aD846C299660"],
+    ["stakedKlpTracker", "0x9e295B5B976a184B14aD8cd72413aD846C299660"],
   ]
 
   return { vault, addresses, trackers }

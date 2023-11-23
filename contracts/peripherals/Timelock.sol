@@ -140,7 +140,7 @@ contract Timelock is ITimelock {
         IRewardRouterV2 _rewardRouter = IRewardRouterV2(rewardRouter);
 
         IHandlerTarget(_rewardRouter.feeGlpTracker()).setHandler(rewardRouter, true);
-        IHandlerTarget(_rewardRouter.stakedGlpTracker()).setHandler(rewardRouter, true);
+        IHandlerTarget(_rewardRouter.stakedKlpTracker()).setHandler(rewardRouter, true);
         IHandlerTarget(klpManager).setHandler(rewardRouter, true);
     }
 

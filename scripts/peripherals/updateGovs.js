@@ -21,7 +21,7 @@ async function getArbValues() {
     "0x908C4D94D34924765f1eDc22A1DD098397c59dD4", // StakedGmxTracker
     "0x4d268a7d4C16ceB5a606c173Bd974984343fea13", // BonusGmxTracker
     "0xd2D1162512F927a7e282Ef43a362659E4F2a728F", // FeeGmxTracker
-    "0x1aDDD80E6039594eE970E5872D247bf0414C8903", // StakedGlpTracker
+    "0x1aDDD80E6039594eE970E5872D247bf0414C8903", // StakedKlpTracker
     "0x4e971a87900b931fF39d1Aad67697F49835400b6", // FeeGlpTracker
   ]
 
@@ -47,7 +47,7 @@ async function getAvaxValues() {
     "0x2bD10f8E93B3669b6d42E74eEedC65dd1B0a1342", // StakedGmxTracker
     "0x908C4D94D34924765f1eDc22A1DD098397c59dD4", // BonusGmxTracker
     "0x4d268a7d4C16ceB5a606c173Bd974984343fea13", // FeeGmxTracker
-    "0x9e295B5B976a184B14aD8cd72413aD846C299660", // StakedGlpTracker
+    "0x9e295B5B976a184B14aD8cd72413aD846C299660", // StakedKlpTracker
     "0xd2D1162512F927a7e282Ef43a362659E4F2a728F", // FeeGlpTracker
   ]
 

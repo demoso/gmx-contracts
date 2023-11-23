@@ -35,7 +35,7 @@ contract RewardRouterV2 is IRewardRouterV2, ReentrancyGuard, Governable {
     address public bonusGmxTracker;
     address public feeGmxTracker;
 
-    address public override stakedGlpTracker;
+    address public override stakedKlpTracker;
     address public override feeGlpTracker;
 
     address public klpManager;
@@ -65,7 +65,7 @@ contract RewardRouterV2 is IRewardRouterV2, ReentrancyGuard, Governable {
         address _bonusGmxTracker,
         address _feeGmxTracker,
         address _feeGlpTracker,
-        address _stakedGlpTracker,
+        address _stakedKlpTracker,
         address _klpManager,
         address _gmxVester,
         address _glpVester
@@ -86,7 +86,7 @@ contract RewardRouterV2 is IRewardRouterV2, ReentrancyGuard, Governable {
         feeGmxTracker = _feeGmxTracker;
 
         feeGlpTracker = _feeGlpTracker;
-        stakedGlpTracker = _stakedGlpTracker;
+        stakedKlpTracker = _stakedKlpTracker;
 
         klpManager = _klpManager;
 
@@ -132,7 +132,7 @@ contract RewardRouterV2 is IRewardRouterV2, ReentrancyGuard, Governable {
         address account = msg.sender;
         uint256 glpAmount = IKlpManager(klpManager).addLiquidityForAccount(account, account, _token, _amount, _minUsdg, _minGlp);
         IRewardTracker(feeGlpTracker).stakeForAccount(account, account, glp, glpAmount);
-        IRewardTracker(stakedGlpTracker).stakeForAccount(account, account, feeGlpTracker, glpAmount);
+        IRewardTracker(stakedKlpTracker).stakeForAccount(account, account, feeGlpTracker, glpAmount);
 
         emit StakeGlp(account, glpAmount);
 
@@ -149,7 +149,7 @@ contract RewardRouterV2 is IRewardRouterV2, ReentrancyGuard, Governable {
         uint256 glpAmount = IKlpManager(klpManager).addLiquidityForAccount(address(this), account, weth, msg.value, _minUsdg, _minGlp);
 
         IRewardTracker(feeGlpTracker).stakeForAccount(account, account, glp, glpAmount);
-        IRewardTracker(stakedGlpTracker).stakeForAccount(account, account, feeGlpTracker, glpAmount);
+        IRewardTracker(stakedKlpTracker).stakeForAccount(account, account, feeGlpTracker, glpAmount);
 
         emit StakeGlp(account, glpAmount);
 
@@ -160,7 +160,7 @@ contract RewardRouterV2 is IRewardRouterV2, ReentrancyGuard, Governable {
         require(_glpAmount > 0, "RewardRouter: invalid _glpAmount");
 
         address account = msg.sender;
-        IRewardTracker(stakedGlpTracker).unstakeForAccount(account, feeGlpTracker, _glpAmount, account);
+        IRewardTracker(stakedKlpTracker).unstakeForAccount(account, feeGlpTracker, _glpAmount, account);
         IRewardTracker(feeGlpTracker).unstakeForAccount(account, glp, _glpAmount, account);
         uint256 amountOut = IKlpManager(klpManager).removeLiquidityForAccount(account, _tokenOut, _glpAmount, _minOut, _receiver);
 
@@ -173,7 +173,7 @@ contract RewardRouterV2 is IRewardRouterV2, ReentrancyGuard, Governable {
         require(_glpAmount > 0, "RewardRouter: invalid _glpAmount");
 
         address account = msg.sender;
-        IRewardTracker(stakedGlpTracker).unstakeForAccount(account, feeGlpTracker, _glpAmount, account);
+        IRewardTracker(stakedKlpTracker).unstakeForAccount(account, feeGlpTracker, _glpAmount, account);
         IRewardTracker(feeGlpTracker).unstakeForAccount(account, glp, _glpAmount, account);
         uint256 amountOut = IKlpManager(klpManager).removeLiquidityForAccount(account, weth, _glpAmount, _minOut, address(this));
 
@@ -193,14 +193,14 @@ contract RewardRouterV2 is IRewardRouterV2, ReentrancyGuard, Governable {
         IRewardTracker(feeGlpTracker).claimForAccount(account, account);
 
         IRewardTracker(stakedGmxTracker).claimForAccount(account, account);
-        IRewardTracker(stakedGlpTracker).claimForAccount(account, account);
+        IRewardTracker(stakedKlpTracker).claimForAccount(account, account);
     }
 
     function claimEsGmx() external nonReentrant {
         address account = msg.sender;
 
         IRewardTracker(stakedGmxTracker).claimForAccount(account, account);
-        IRewardTracker(stakedGlpTracker).claimForAccount(account, account);
+        IRewardTracker(stakedKlpTracker).claimForAccount(account, account);
     }
 
     function claimFees() external nonReentrant {
@@ -243,7 +243,7 @@ contract RewardRouterV2 is IRewardRouterV2, ReentrancyGuard, Governable {
         uint256 esGmxAmount = 0;
         if (_shouldClaimEsGmx) {
             uint256 esGmxAmount0 = IRewardTracker(stakedGmxTracker).claimForAccount(account, account);
-            uint256 esGmxAmount1 = IRewardTracker(stakedGlpTracker).claimForAccount(account, account);
+            uint256 esGmxAmount1 = IRewardTracker(stakedKlpTracker).claimForAccount(account, account);
             esGmxAmount = esGmxAmount0.add(esGmxAmount1);
         }
 
@@ -287,7 +287,7 @@ contract RewardRouterV2 is IRewardRouterV2, ReentrancyGuard, Governable {
     // is more than zero
     // it is possible for multiple transfers to be sent into a single account, using signalTransfer and
     // acceptTransfer, if those values have not been updated yet
-    // for GLP transfers it is also possible to transfer GLP into an account using the StakedGlp contract
+    // for GLP transfers it is also possible to transfer GLP into an account using the StakedKlp contract
     function signalTransfer(address _receiver) external nonReentrant {
         require(IERC20(gmxVester).balanceOf(msg.sender) == 0, "RewardRouter: sender has vested tokens");
         require(IERC20(glpVester).balanceOf(msg.sender) == 0, "RewardRouter: sender has vested tokens");
@@ -332,11 +332,11 @@ contract RewardRouterV2 is IRewardRouterV2, ReentrancyGuard, Governable {
 
         uint256 glpAmount = IRewardTracker(feeGlpTracker).depositBalances(_sender, glp);
         if (glpAmount > 0) {
-            IRewardTracker(stakedGlpTracker).unstakeForAccount(_sender, feeGlpTracker, glpAmount, _sender);
+            IRewardTracker(stakedKlpTracker).unstakeForAccount(_sender, feeGlpTracker, glpAmount, _sender);
             IRewardTracker(feeGlpTracker).unstakeForAccount(_sender, glp, glpAmount, _sender);
 
             IRewardTracker(feeGlpTracker).stakeForAccount(_sender, receiver, glp, glpAmount);
-            IRewardTracker(stakedGlpTracker).stakeForAccount(receiver, receiver, feeGlpTracker, glpAmount);
+            IRewardTracker(stakedKlpTracker).stakeForAccount(receiver, receiver, feeGlpTracker, glpAmount);
         }
 
         IVester(gmxVester).transferStakeValues(_sender, receiver);
@@ -356,8 +356,8 @@ contract RewardRouterV2 is IRewardRouterV2, ReentrancyGuard, Governable {
         require(IVester(gmxVester).transferredAverageStakedAmounts(_receiver) == 0, "RewardRouter: gmxVester.transferredAverageStakedAmounts > 0");
         require(IVester(gmxVester).transferredCumulativeRewards(_receiver) == 0, "RewardRouter: gmxVester.transferredCumulativeRewards > 0");
 
-        require(IRewardTracker(stakedGlpTracker).averageStakedAmounts(_receiver) == 0, "RewardRouter: stakedGlpTracker.averageStakedAmounts > 0");
-        require(IRewardTracker(stakedGlpTracker).cumulativeRewards(_receiver) == 0, "RewardRouter: stakedGlpTracker.cumulativeRewards > 0");
+        require(IRewardTracker(stakedKlpTracker).averageStakedAmounts(_receiver) == 0, "RewardRouter: stakedKlpTracker.averageStakedAmounts > 0");
+        require(IRewardTracker(stakedKlpTracker).cumulativeRewards(_receiver) == 0, "RewardRouter: stakedKlpTracker.cumulativeRewards > 0");
 
         require(IRewardTracker(feeGlpTracker).averageStakedAmounts(_receiver) == 0, "RewardRouter: feeGlpTracker.averageStakedAmounts > 0");
         require(IRewardTracker(feeGlpTracker).cumulativeRewards(_receiver) == 0, "RewardRouter: feeGlpTracker.cumulativeRewards > 0");
@@ -387,7 +387,7 @@ contract RewardRouterV2 is IRewardRouterV2, ReentrancyGuard, Governable {
     }
 
     function _compoundGlp(address _account) private {
-        uint256 esGmxAmount = IRewardTracker(stakedGlpTracker).claimForAccount(_account, _account);
+        uint256 esGmxAmount = IRewardTracker(stakedKlpTracker).claimForAccount(_account, _account);
         if (esGmxAmount > 0) {
             _stakeGmx(_account, _account, esGmx, esGmxAmount);
         }

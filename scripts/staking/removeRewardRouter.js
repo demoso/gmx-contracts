@@ -11,7 +11,7 @@ async function main() {
   const feeGmxTracker = await contractAt("RewardTracker", "0xd2D1162512F927a7e282Ef43a362659E4F2a728F")
 
   const feeGlpTracker = await contractAt("RewardTracker", "0x4e971a87900b931fF39d1Aad67697F49835400b6")
-  const stakedGlpTracker = await contractAt("RewardTracker", "0x1aDDD80E6039594eE970E5872D247bf0414C8903")
+  const stakedKlpTracker = await contractAt("RewardTracker", "0x1aDDD80E6039594eE970E5872D247bf0414C8903")
 
   // allow rewardRouter to stake in stakedGmxTracker
   await sendTxn(stakedGmxTracker.setHandler(rewardRouter.address, false), "stakedGmxTracker.setHandler(rewardRouter)")
@@ -26,8 +26,8 @@ async function main() {
   await sendTxn(klpManager.setHandler(rewardRouter.address, false), "klpManager.setHandler(rewardRouter)")
   // allow rewardRouter to stake in feeGlpTracker
   await sendTxn(feeGlpTracker.setHandler(rewardRouter.address, false), "feeGlpTracker.setHandler(rewardRouter)")
-  // allow rewardRouter to stake in stakedGlpTracker
-  await sendTxn(stakedGlpTracker.setHandler(rewardRouter.address, false), "stakedGlpTracker.setHandler(rewardRouter)")
+  // allow rewardRouter to stake in stakedKlpTracker
+  await sendTxn(stakedKlpTracker.setHandler(rewardRouter.address, false), "stakedKlpTracker.setHandler(rewardRouter)")
 }
 
 main()

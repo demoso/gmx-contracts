@@ -10,7 +10,7 @@ contract KlpBalance {
     using SafeMath for uint256;
 
     IKlpManager public klpManager;
-    address public stakedGlpTracker;
+    address public stakedKlpTracker;
 
     mapping(address => mapping(address => uint256)) public allowances;
 
@@ -18,10 +18,10 @@ contract KlpBalance {
 
     constructor(
         IKlpManager _klpManager,
-        address _stakedGlpTracker
+        address _stakedKlpTracker
     ) public {
         klpManager = _klpManager;
-        stakedGlpTracker = _stakedGlpTracker;
+        stakedKlpTracker = _stakedKlpTracker;
     }
 
     function allowance(address _owner, address _spender) external view returns (uint256) {
@@ -63,6 +63,6 @@ contract KlpBalance {
             "KlpBalance: cooldown duration not yet passed"
         );
 
-        IERC20(stakedGlpTracker).transferFrom(_sender, _recipient, _amount);
+        IERC20(stakedKlpTracker).transferFrom(_sender, _recipient, _amount);
     }
 }

@@ -14,7 +14,7 @@ async function getArbValues() {
     ["StakedGmxTracker", "0x908C4D94D34924765f1eDc22A1DD098397c59dD4", "RewardTracker"],
     ["BonusGmxTracker", "0x4d268a7d4C16ceB5a606c173Bd974984343fea13", "RewardTracker"],
     ["FeeGmxTracker", "0xd2D1162512F927a7e282Ef43a362659E4F2a728F", "RewardTracker"],
-    ["StakedGlpTracker", "0x1aDDD80E6039594eE970E5872D247bf0414C8903", "RewardTracker"],
+    ["StakedKlpTracker", "0x1aDDD80E6039594eE970E5872D247bf0414C8903", "RewardTracker"],
     ["FeeGlpTracker", "0x4e971a87900b931fF39d1Aad67697F49835400b6", "RewardTracker"],
     // Vester methods: isHandler
     ["GmxVester", "0x199070DDfd1CFb69173aa2F7e20906F26B363004", "Vester"],
@@ -45,7 +45,7 @@ async function getAvaxValues() {
     ["StakedGmxTracker", "0x2bD10f8E93B3669b6d42E74eEedC65dd1B0a1342", "RewardTracker"],
     ["BonusGmxTracker", "0x908C4D94D34924765f1eDc22A1DD098397c59dD4", "RewardTracker"],
     ["FeeGmxTracker", "0x4d268a7d4C16ceB5a606c173Bd974984343fea13", "RewardTracker"],
-    ["StakedGlpTracker", "0x9e295B5B976a184B14aD8cd72413aD846C299660", "RewardTracker"],
+    ["StakedKlpTracker", "0x9e295B5B976a184B14aD8cd72413aD846C299660", "RewardTracker"],
     ["FeeGlpTracker", "0xd2D1162512F927a7e282Ef43a362659E4F2a728F", "RewardTracker"],
     // Vester methods: isHandler
     ["GmxVester", "0x472361d3cA5F49c8E633FB50385BfaD1e018b445", "Vester"],

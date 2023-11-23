@@ -28,7 +28,7 @@ async function main() {
   await sendTxn(feeGmxDistributor.updateLastDistributionTime(), "feeGmxDistributor.updateLastDistributionTime")
 
   const feeGlpTracker = {address: AddressZero}
-  const stakedGlpTracker = {address: AddressZero}
+  const stakedKlpTracker = {address: AddressZero}
 
   const stakedAlpTracker = {address: AddressZero}
   const bonusAlpTracker = {address: AddressZero}
@@ -58,7 +58,7 @@ async function main() {
     bonusGmxTracker.address,
     feeGmxTracker.address,
     feeGlpTracker.address,
-    stakedGlpTracker.address,
+    stakedKlpTracker.address,
     stakedAlpTracker.address,
     bonusAlpTracker.address,
     feeAlpTracker.address,

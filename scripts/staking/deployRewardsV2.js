@@ -19,10 +19,10 @@ async function main() {
   const bonusGmxTracker = {address: "0x4d268a7d4C16ceB5a606c173Bd974984343fea13"}
   const feeGmxTracker = {address: "0xd2D1162512F927a7e282Ef43a362659E4F2a728F"}
   const feeGlpTracker = {address: "0x4e971a87900b931fF39d1Aad67697F49835400b6"}
-  const stakedGlpTracker = {address: "0x1aDDD80E6039594eE970E5872D247bf0414C8903"}
+  const stakedKlpTracker = {address: "0x1aDDD80E6039594eE970E5872D247bf0414C8903"}
   const klpManager = {address: "0x321F653eED006AD1C29D174e17d96351BDe22649"}
   const stakedGmxDistributor = {address: "0x23208B91A98c7C1CD9FE63085BFf68311494F193"}
-  const stakedGlpDistributor = {address: "0x60519b48ec4183a61ca2B8e37869E675FD203b34"}
+  const stakedKlpDistributor = {address: "0x60519b48ec4183a61ca2B8e37869E675FD203b34"}
 
   const timelock = await deployContract("Timelock", [
     admin.address,
@@ -50,9 +50,9 @@ async function main() {
     "vGLP", // _symbol
     vestingDuration, // _vestingDuration
     esGmx.address, // _esToken
-    stakedGlpTracker.address, // _pairToken
+    stakedKlpTracker.address, // _pairToken
     gmx.address, // _claimableToken
-    stakedGlpTracker.address, // _rewardTracker
+    stakedKlpTracker.address, // _rewardTracker
   ])
 
   const rewardRouter = await deployContract("RewardRouterV2", [])
@@ -67,7 +67,7 @@ async function main() {
     bonusGmxTracker.address,
     feeGmxTracker.address,
     feeGlpTracker.address,
-    stakedGlpTracker.address,
+    stakedKlpTracker.address,
     klpManager.address,
     gmxVester.address,
     glpVester.address
@@ -81,9 +81,9 @@ async function main() {
     bonusGmxTracker.address,
     feeGmxTracker.address,
     feeGlpTracker.address,
-    stakedGlpTracker.address,
+    stakedKlpTracker.address,
     stakedGmxDistributor.address,
-    stakedGlpDistributor.address,
+    stakedKlpDistributor.address,
     esGmx.address,
     bnGmx.address,
     gmxVester.address,

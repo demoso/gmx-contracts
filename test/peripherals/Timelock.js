@@ -32,7 +32,7 @@ describe("Timelock", function () {
   let fastPriceEvents
   let fastPriceFeed
   let feeGlpTracker
-  let stakedGlpTracker
+  let stakedKlpTracker
   let rewardRouter
 
   beforeEach(async () => {
@@ -68,7 +68,7 @@ describe("Timelock", function () {
     await vault.setPriceFeed(user3.address)
 
     feeGlpTracker = await deployContract("RewardTracker", ["Fee GLP", "fGLP"])
-    stakedGlpTracker = await deployContract("RewardTracker", ["Fee + Staked GLP", "fsGLP"])
+    stakedKlpTracker = await deployContract("RewardTracker", ["Fee + Staked GLP", "fsGLP"])
 
     rewardRouter = await deployContract("RewardRouterV2", [])
     await rewardRouter.initialize(
@@ -81,7 +81,7 @@ describe("Timelock", function () {
       AddressZero,
       AddressZero,
       feeGlpTracker.address,
-      stakedGlpTracker.address,
+      stakedKlpTracker.address,
       AddressZero,
       AddressZero,
       AddressZero
@@ -363,17 +363,17 @@ describe("Timelock", function () {
     await expect(timelock.connect(user0).initRewardRouter())
       .to.be.revertedWith("Timelock: forbidden")
 
-    await stakedGlpTracker.setGov(timelock.address)
+    await stakedKlpTracker.setGov(timelock.address)
     await feeGlpTracker.setGov(timelock.address)
     await klpManager.setGov(timelock.address)
 
-    expect(await stakedGlpTracker.isHandler(rewardRouter.address)).eq(false)
+    expect(await stakedKlpTracker.isHandler(rewardRouter.address)).eq(false)
     expect(await feeGlpTracker.isHandler(rewardRouter.address)).eq(false)
     expect(await klpManager.isHandler(rewardRouter.address)).eq(false)
 
     await timelock.initRewardRouter()
 
-    expect(await stakedGlpTracker.isHandler(rewardRouter.address)).eq(true)
+    expect(await stakedKlpTracker.isHandler(rewardRouter.address)).eq(true)
     expect(await feeGlpTracker.isHandler(rewardRouter.address)).eq(true)
     expect(await klpManager.isHandler(rewardRouter.address)).eq(true)
   })
