@@ -46,7 +46,7 @@ async function main() {
   await sendTxn(timelock.signalSetHandler(stakedGlpTracker.address, stakedGlp.address, true), "timelock.signalSetHandler(stakedGlpTracker)")
   await sendTxn(timelock.signalSetHandler(feeGlpTracker.address, stakedGlp.address, true), "timelock.signalSetHandler(stakedGlpTracker)")
 
-  // await deployContract("GlpBalance", [klpManager.address, stakedGlpTracker.address])
+  // await deployContract("KlpBalance", [klpManager.address, stakedGlpTracker.address])
 }
 
 main()

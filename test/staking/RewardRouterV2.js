@@ -1591,26 +1591,26 @@ describe("RewardRouterV2", function () {
     expect(await stakedGlpTracker.stakedAmounts(user1.address)).eq(expandDecimals(2991, 17))
     expect(await stakedGlpTracker.depositBalances(user1.address, feeGlpTracker.address)).eq(expandDecimals(2991, 17))
 
-    const glpBalance = await deployContract("GlpBalance", [klpManager.address, stakedGlpTracker.address])
+    const klpBalance = await deployContract("KlpBalance", [klpManager.address, stakedGlpTracker.address])
 
-    await expect(glpBalance.connect(user2).transferFrom(user1.address, user3.address, expandDecimals(2991, 17)))
-      .to.be.revertedWith("GlpBalance: transfer amount exceeds allowance")
+    await expect(klpBalance.connect(user2).transferFrom(user1.address, user3.address, expandDecimals(2991, 17)))
+      .to.be.revertedWith("KlpBalance: transfer amount exceeds allowance")
 
-    await glpBalance.connect(user1).approve(user2.address, expandDecimals(2991, 17))
+    await klpBalance.connect(user1).approve(user2.address, expandDecimals(2991, 17))
 
-    await expect(glpBalance.connect(user2).transferFrom(user1.address, user3.address, expandDecimals(2991, 17)))
-      .to.be.revertedWith("GlpBalance: cooldown duration not yet passed")
+    await expect(klpBalance.connect(user2).transferFrom(user1.address, user3.address, expandDecimals(2991, 17)))
+      .to.be.revertedWith("KlpBalance: cooldown duration not yet passed")
 
     await increaseTime(provider, 24 * 60 * 60 + 10)
     await mineBlock(provider)
 
-    await expect(glpBalance.connect(user2).transferFrom(user1.address, user3.address, expandDecimals(2991, 17)))
+    await expect(klpBalance.connect(user2).transferFrom(user1.address, user3.address, expandDecimals(2991, 17)))
       .to.be.revertedWith("RewardTracker: transfer amount exceeds allowance")
 
-    await timelock.signalSetHandler(stakedGlpTracker.address, glpBalance.address, true)
+    await timelock.signalSetHandler(stakedGlpTracker.address, klpBalance.address, true)
     await increaseTime(provider, 20)
     await mineBlock(provider)
-    await timelock.setHandler(stakedGlpTracker.address, glpBalance.address, true)
+    await timelock.setHandler(stakedGlpTracker.address, klpBalance.address, true)
 
     expect(await feeGlpTracker.stakedAmounts(user1.address)).eq(expandDecimals(2991, 17))
     expect(await feeGlpTracker.depositBalances(user1.address, glp.address)).eq(expandDecimals(2991, 17))
@@ -1626,7 +1626,7 @@ describe("RewardRouterV2", function () {
     expect(await stakedGlpTracker.depositBalances(user3.address, feeGlpTracker.address)).eq(0)
     expect(await stakedGlpTracker.balanceOf(user3.address)).eq(0)
 
-    await glpBalance.connect(user2).transferFrom(user1.address, user3.address, expandDecimals(2991, 17))
+    await klpBalance.connect(user2).transferFrom(user1.address, user3.address, expandDecimals(2991, 17))
 
     expect(await feeGlpTracker.stakedAmounts(user1.address)).eq(expandDecimals(2991, 17))
     expect(await feeGlpTracker.depositBalances(user1.address, glp.address)).eq(expandDecimals(2991, 17))
@@ -1649,12 +1649,12 @@ describe("RewardRouterV2", function () {
       user1.address
     )).to.be.revertedWith("RewardTracker: burn amount exceeds balance")
 
-    await glpBalance.connect(user3).approve(user2.address, expandDecimals(3000, 17))
+    await klpBalance.connect(user3).approve(user2.address, expandDecimals(3000, 17))
 
-    await expect(glpBalance.connect(user2).transferFrom(user3.address, user1.address, expandDecimals(2992, 17)))
+    await expect(klpBalance.connect(user2).transferFrom(user3.address, user1.address, expandDecimals(2992, 17)))
       .to.be.revertedWith("RewardTracker: transfer amount exceeds balance")
 
-    await glpBalance.connect(user2).transferFrom(user3.address, user1.address, expandDecimals(2991, 17))
+    await klpBalance.connect(user2).transferFrom(user3.address, user1.address, expandDecimals(2991, 17))
 
     expect(await bnb.balanceOf(user1.address)).eq(0)
 
