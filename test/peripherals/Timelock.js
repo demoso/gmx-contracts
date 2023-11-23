@@ -14,7 +14,7 @@ describe("Timelock", function () {
   const provider = waffle.provider
   const [wallet, user0, user1, user2, user3, rewardManager, tokenManager, mintReceiver, positionRouter] = provider.getWallets()
   let vault
-  let glpManager
+  let klpManager
   let glp
   let vaultUtils
   let vaultPriceFeed
@@ -51,7 +51,7 @@ describe("Timelock", function () {
     vaultPriceFeed = await deployContract("VaultPriceFeed", [])
 
     glp = await deployContract("GLP", [])
-    glpManager = await deployContract("GlpManager", [vault.address, usdg.address, glp.address, ethers.constants.AddressZero, 24 * 60 * 60])
+    klpManager = await deployContract("KlpManager", [vault.address, usdg.address, glp.address, ethers.constants.AddressZero, 24 * 60 * 60])
 
     const initVaultResult = await initVault(vault, router, usdg, vaultPriceFeed)
     vaultUtils = initVaultResult.vaultUtils
@@ -92,7 +92,7 @@ describe("Timelock", function () {
       5 * 24 * 60 * 60, // buffer
       tokenManager.address, // tokenManager
       mintReceiver.address, // mintReceiver
-      glpManager.address, // glpManager
+      klpManager.address, // klpManager
       rewardRouter.address, // rewardRouter
       expandDecimals(1000, 18), // maxTokenSupply
       50, // marginFeeBasisPoints 0.5%
@@ -141,7 +141,7 @@ describe("Timelock", function () {
       5 * 24 * 60 * 60 + 1, // buffer
       tokenManager.address, // tokenManager
       mintReceiver.address, // mintReceiver
-      glpManager.address, // glpManager
+      klpManager.address, // klpManager
       user0.address, // rewardRouter
       1000, // maxTokenSupply
       10, // marginFeeBasisPoints
@@ -264,9 +264,9 @@ describe("Timelock", function () {
 
   it("updateUsdgSupply", async () => {
     await usdg.addVault(wallet.address)
-    await usdg.mint(glpManager.address, 1000)
+    await usdg.mint(klpManager.address, 1000)
 
-    expect(await usdg.balanceOf(glpManager.address)).eq(1000)
+    expect(await usdg.balanceOf(klpManager.address)).eq(1000)
     expect(await usdg.totalSupply()).eq(1000)
 
     await expect(timelock.connect(user0).updateUsdgSupply(500))
@@ -279,12 +279,12 @@ describe("Timelock", function () {
 
     await timelock.updateUsdgSupply(500)
 
-    expect(await usdg.balanceOf(glpManager.address)).eq(500)
+    expect(await usdg.balanceOf(klpManager.address)).eq(500)
     expect(await usdg.totalSupply()).eq(500)
 
     await timelock.updateUsdgSupply(2000)
 
-    expect(await usdg.balanceOf(glpManager.address)).eq(2000)
+    expect(await usdg.balanceOf(klpManager.address)).eq(2000)
     expect(await usdg.totalSupply()).eq(2000)
   })
 
@@ -294,7 +294,7 @@ describe("Timelock", function () {
       3 * 24 * 60 * 60, // _buffer
       tokenManager.address, // _tokenManager
       mintReceiver.address, // _mintReceiver
-      user0.address, // _glpManager
+      user0.address, // _klpManager
       user1.address, // _rewardRouter
       1000, // _maxTokenSupply
       10, // _marginFeeBasisPoints
@@ -332,7 +332,7 @@ describe("Timelock", function () {
     expect(await vault.isSwapEnabled()).eq(false)
   })
 
-  it("setContractHandler", async() => {
+  it("setContractHandler", async () => {
     await expect(timelock.connect(user0).setContractHandler(user1.address, true))
       .to.be.revertedWith("Timelock: forbidden")
 
@@ -341,41 +341,41 @@ describe("Timelock", function () {
     expect(await timelock.isHandler(user1.address)).eq(true)
   })
 
-  it("initGlpManager", async () => {
-    await expect(timelock.connect(user0).initGlpManager())
+  it("initKlpManager", async () => {
+    await expect(timelock.connect(user0).initKlpManager())
       .to.be.revertedWith("Timelock: forbidden")
 
-      await glp.setGov(timelock.address)
-      await usdg.setGov(timelock.address)
+    await glp.setGov(timelock.address)
+    await usdg.setGov(timelock.address)
 
-      expect(await glp.isMinter(glpManager.address)).eq(false)
-      expect(await usdg.vaults(glpManager.address)).eq(false)
-      expect(await vault.isManager(glpManager.address)).eq(false)
+    expect(await glp.isMinter(klpManager.address)).eq(false)
+    expect(await usdg.vaults(klpManager.address)).eq(false)
+    expect(await vault.isManager(klpManager.address)).eq(false)
 
-      await timelock.initGlpManager()
+    await timelock.initKlpManager()
 
-      expect(await glp.isMinter(glpManager.address)).eq(true)
-      expect(await usdg.vaults(glpManager.address)).eq(true)
-      expect(await vault.isManager(glpManager.address)).eq(true)
+    expect(await glp.isMinter(klpManager.address)).eq(true)
+    expect(await usdg.vaults(klpManager.address)).eq(true)
+    expect(await vault.isManager(klpManager.address)).eq(true)
   })
 
   it("initRewardRouter", async () => {
     await expect(timelock.connect(user0).initRewardRouter())
       .to.be.revertedWith("Timelock: forbidden")
 
-      await stakedGlpTracker.setGov(timelock.address)
-      await feeGlpTracker.setGov(timelock.address)
-      await glpManager.setGov(timelock.address)
+    await stakedGlpTracker.setGov(timelock.address)
+    await feeGlpTracker.setGov(timelock.address)
+    await klpManager.setGov(timelock.address)
 
-      expect(await stakedGlpTracker.isHandler(rewardRouter.address)).eq(false)
-      expect(await feeGlpTracker.isHandler(rewardRouter.address)).eq(false)
-      expect(await glpManager.isHandler(rewardRouter.address)).eq(false)
+    expect(await stakedGlpTracker.isHandler(rewardRouter.address)).eq(false)
+    expect(await feeGlpTracker.isHandler(rewardRouter.address)).eq(false)
+    expect(await klpManager.isHandler(rewardRouter.address)).eq(false)
 
-      await timelock.initRewardRouter()
+    await timelock.initRewardRouter()
 
-      expect(await stakedGlpTracker.isHandler(rewardRouter.address)).eq(true)
-      expect(await feeGlpTracker.isHandler(rewardRouter.address)).eq(true)
-      expect(await glpManager.isHandler(rewardRouter.address)).eq(true)
+    expect(await stakedGlpTracker.isHandler(rewardRouter.address)).eq(true)
+    expect(await feeGlpTracker.isHandler(rewardRouter.address)).eq(true)
+    expect(await klpManager.isHandler(rewardRouter.address)).eq(true)
   })
 
   it("setKeeper", async() => {
@@ -1373,20 +1373,20 @@ describe("Timelock", function () {
   })
 
   it("setShortsTrackerAveragePriceWeight", async () => {
-    await glpManager.setGov(timelock.address)
-    expect(await glpManager.gov()).eq(timelock.address)
+    await klpManager.setGov(timelock.address)
+    expect(await klpManager.gov()).eq(timelock.address)
 
     await expect(timelock.connect(user0).setShortsTrackerAveragePriceWeight(1234))
       .to.be.revertedWith("Timelock: forbidden")
 
-    expect(await glpManager.shortsTrackerAveragePriceWeight()).eq(0)
+    expect(await klpManager.shortsTrackerAveragePriceWeight()).eq(0)
     await timelock.setShortsTrackerAveragePriceWeight(1234)
-    expect(await glpManager.shortsTrackerAveragePriceWeight()).eq(1234)
+    expect(await klpManager.shortsTrackerAveragePriceWeight()).eq(1234)
   })
 
   it("setGlpCooldownDuration", async () => {
-    await glpManager.setGov(timelock.address)
-    expect(await glpManager.gov()).eq(timelock.address)
+    await klpManager.setGov(timelock.address)
+    expect(await klpManager.gov()).eq(timelock.address)
 
     await expect(timelock.connect(user0).setGlpCooldownDuration(3600))
       .to.be.revertedWith("Timelock: forbidden")
@@ -1394,8 +1394,8 @@ describe("Timelock", function () {
     await expect(timelock.connect(wallet).setGlpCooldownDuration(3 * 60 * 60))
       .to.be.revertedWith("Timelock: invalid _cooldownDuration")
 
-    expect(await glpManager.cooldownDuration()).eq(86400)
+    expect(await klpManager.cooldownDuration()).eq(86400)
     await timelock.setGlpCooldownDuration(3600)
-    expect(await glpManager.cooldownDuration()).eq(3600)
+    expect(await klpManager.cooldownDuration()).eq(3600)
   })
 })

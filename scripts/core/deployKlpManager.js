@@ -14,16 +14,16 @@ async function main() {
   const usdg = await contractAt("USDG", "0x45096e7aA921f27590f8F19e457794EB09678141")
   const glp = await contractAt("GLP", "0x4277f8F2c384827B5273592FF7CeBd9f2C1ac258")
 
-  const glpManager = await deployContract("GlpManager", [vault.address, usdg.address, glp.address, 15 * 60])
+  const klpManager = await deployContract("KlpManager", [vault.address, usdg.address, glp.address, 15 * 60])
 
-  await sendTxn(glpManager.setInPrivateMode(true), "glpManager.setInPrivateMode")
+  await sendTxn(klpManager.setInPrivateMode(true), "klpManager.setInPrivateMode")
 
-  await sendTxn(glp.setMinter(glpManager.address, true), "glp.setMinter")
-  await sendTxn(usdg.addVault(glpManager.address), "usdg.addVault")
-  await sendTxn(vault.setManager(glpManager.address, true), "vault.setManager")
+  await sendTxn(glp.setMinter(klpManager.address, true), "glp.setMinter")
+  await sendTxn(usdg.addVault(klpManager.address), "usdg.addVault")
+  await sendTxn(vault.setManager(klpManager.address, true), "vault.setManager")
 
   writeTmpAddresses({
-    glpManager: glpManager.address
+    klpManager: klpManager.address
   })
 }
 

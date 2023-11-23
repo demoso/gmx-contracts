@@ -114,11 +114,23 @@ async function getArbValues() {
   const feesUsd = await getFeesUsd(vault, reader, tokenInfo, tokenArr)
   const stakedGmx = await contractAt("Token", "0xd2D1162512F927a7e282Ef43a362659E4F2a728F", signer)
   const stakedGmxSupply = await stakedGmx.totalSupply()
-  const { totalTransferAmount: keeperCosts } = await getArbKeeperValues()
-  const glpManager = await contractAt("GlpManager", "0x321F653eED006AD1C29D174e17d96351BDe22649", signer)
-  const glpAum = await glpManager.getAum(true)
+  const {totalTransferAmount: keeperCosts} = await getArbKeeperValues()
+  const klpManager = await contractAt("KlpManager", "0x321F653eED006AD1C29D174e17d96351BDe22649", signer)
+  const glpAum = await klpManager.getAum(true)
 
-  return { vault, reader, tokens, tokenInfo, nativeTokenPrice, feesUsd, stakedGmx, stakedGmxSupply, keeperCosts, glpManager, glpAum }
+  return {
+    vault,
+    reader,
+    tokens,
+    tokenInfo,
+    nativeTokenPrice,
+    feesUsd,
+    stakedGmx,
+    stakedGmxSupply,
+    keeperCosts,
+    klpManager,
+    glpAum
+  }
 }
 
 async function getAvaxValues() {
@@ -132,11 +144,23 @@ async function getAvaxValues() {
   const feesUsd = await getFeesUsd(vault, reader, tokenInfo, tokenArr)
   const stakedGmx = await contractAt("Token", "0x4d268a7d4C16ceB5a606c173Bd974984343fea13", signer)
   const stakedGmxSupply = await stakedGmx.totalSupply()
-  const { totalTransferAmount: keeperCosts } = await getAvaxKeeperValues()
-  const glpManager = await contractAt("GlpManager", "0xe1ae4d4b06A5Fe1fc288f6B4CD72f9F8323B107F", signer)
-  const glpAum = await glpManager.getAum(true)
+  const {totalTransferAmount: keeperCosts} = await getAvaxKeeperValues()
+  const klpManager = await contractAt("KlpManager", "0xe1ae4d4b06A5Fe1fc288f6B4CD72f9F8323B107F", signer)
+  const glpAum = await klpManager.getAum(true)
 
-  return { vault, reader, tokens, tokenInfo, nativeTokenPrice, feesUsd, stakedGmx, stakedGmxSupply, keeperCosts, glpManager, glpAum }
+  return {
+    vault,
+    reader,
+    tokens,
+    tokenInfo,
+    nativeTokenPrice,
+    feesUsd,
+    stakedGmx,
+    stakedGmxSupply,
+    keeperCosts,
+    klpManager,
+    glpAum
+  }
 }
 
 module.exports = {

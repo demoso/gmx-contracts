@@ -27,15 +27,15 @@ async function main() {
   await sendTxn(feeGmxTracker.initialize([bonusGmxTracker.address, bnGmx.address], feeGmxDistributor.address), "feeGmxTracker.initialize")
   await sendTxn(feeGmxDistributor.updateLastDistributionTime(), "feeGmxDistributor.updateLastDistributionTime")
 
-  const feeGlpTracker = { address: AddressZero }
-  const stakedGlpTracker = { address: AddressZero }
+  const feeGlpTracker = {address: AddressZero}
+  const stakedGlpTracker = {address: AddressZero}
 
-  const stakedAlpTracker = { address: AddressZero }
-  const bonusAlpTracker = { address: AddressZero }
-  const feeAlpTracker = { address: AddressZero }
+  const stakedAlpTracker = {address: AddressZero}
+  const bonusAlpTracker = {address: AddressZero}
+  const feeAlpTracker = {address: AddressZero}
 
-  const glpManager = { address: AddressZero }
-  const glp = { address: AddressZero }
+  const klpManager = {address: AddressZero}
+  const glp = {address: AddressZero}
 
   await sendTxn(stakedGmxTracker.setInPrivateTransferMode(true), "stakedGmxTracker.setInPrivateTransferMode")
   await sendTxn(stakedGmxTracker.setInPrivateStakingMode(true), "stakedGmxTracker.setInPrivateStakingMode")
@@ -62,7 +62,7 @@ async function main() {
     stakedAlpTracker.address,
     bonusAlpTracker.address,
     feeAlpTracker.address,
-    glpManager.address
+    klpManager.address
   ), "rewardRouter.initialize")
 
   // allow rewardRouter to stake in stakedGmxTracker

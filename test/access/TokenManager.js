@@ -36,7 +36,7 @@ describe("TokenManager", function () {
       5 * 24 * 60 * 60, // buffer
       tokenManager.address, // tokenManager
       user2.address, // mintReceiver
-      user0.address, // glpManager
+      user0.address, // klpManager
       user1.address, // rewardRouter
       expandDecimals(1000, 18), // maxTokenSupply
       10, // marginFeeBasisPoints

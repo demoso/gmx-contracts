@@ -37,12 +37,12 @@ async function main() {
   const { vault, usdg, glp, shortsTracker } = await getValues()
 
   const cooldownDuration = 0
-  const glpManager = await deployContract("GlpManager", [vault.address, usdg.address, glp.address, shortsTracker.address, cooldownDuration])
+  const klpManager = await deployContract("KlpManager", [vault.address, usdg.address, glp.address, shortsTracker.address, cooldownDuration])
 
-  await sendTxn(glpManager.setInPrivateMode(true), "glpManager.setInPrivateMode")
+  await sendTxn(klpManager.setInPrivateMode(true), "klpManager.setInPrivateMode")
 
   writeTmpAddresses({
-    glpManager: glpManager.address
+    klpManager: klpManager.address
   })
 }
 

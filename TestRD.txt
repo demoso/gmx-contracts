@@ -23,7 +23,7 @@ Compiled 125 Solidity files successfully (evm target: istanbul).
     ✔ signSetGov (129ms)
     ✔ setGov (425ms)
 
-  GlpManager
+  KlpManager
     ✔ inits
     ✔ setGov (61ms)
     ✔ setHandler (59ms)
@@ -36,9 +36,9 @@ removeLiquidity gas used 460624
     ✔ addLiquidity, removeLiquidity (4467ms)
     ✔ addLiquidityForAccount, removeLiquidityForAccount (1186ms)
     Different avg price in Vault and ShortsTracker
-      ✔ GlpManager ignores ShortsTracker if flag is off (151ms)
-      ✔ GlpManager switches gradually to ShortsTracker average price (406ms)
-      ✔ GlpManager switches back to Vault average price after flag is turned off (625ms)
+      ✔ KlpManager ignores ShortsTracker if flag is off (151ms)
+      ✔ KlpManager switches gradually to ShortsTracker average price (406ms)
+      ✔ KlpManager switches back to Vault average price after flag is turned off (625ms)
 
   OrderBook, cancelMultiple
     ✔ cancelMultiple (359ms)
@@ -163,7 +163,7 @@ executeSwapOrder 312246
     ✔ liquidatePosition (682ms)
 
   PositionManager next short data calculations
-    ✔ PositionManager and GlpManager init with shortsTracker
+    ✔ PositionManager and KlpManager init with shortsTracker
     ✔ does not update shorts data if isGlobalShortDataReady == false (430ms)
     ✔ updates global short sizes as Vault does (450ms)
     ✔ updates global short average prices on position increases as Vault does (509ms)
@@ -589,7 +589,7 @@ tx3 setPrices gas used 84999
     ✔ setVaultUtils (50ms)
     ✔ setIsSwapEnabled (48ms)
     ✔ setContractHandler (365ms)
-    ✔ initGlpManager (89ms)
+    ✔ initKlpManager (89ms)
     ✔ initRewardRouter (91ms)
     ✔ setKeeper (51ms)
     ✔ setIsLeverageEnabled (84ms)

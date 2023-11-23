@@ -11,7 +11,7 @@ import "../libraries/utils/Address.sol";
 import "./interfaces/IRewardTracker.sol";
 import "../tokens/interfaces/IMintable.sol";
 import "../tokens/interfaces/IWETH.sol";
-import "../core/interfaces/IGlpManager.sol";
+import "../core/interfaces/IKlpManager.sol";
 import "../access/Governable.sol";
 
 contract RewardRouter is ReentrancyGuard, Governable {
@@ -36,7 +36,7 @@ contract RewardRouter is ReentrancyGuard, Governable {
     address public stakedGlpTracker;
     address public feeGlpTracker;
 
-    address public glpManager;
+    address public klpManager;
 
     event StakeGmx(address account, uint256 amount);
     event UnstakeGmx(address account, uint256 amount);
@@ -59,7 +59,7 @@ contract RewardRouter is ReentrancyGuard, Governable {
         address _feeGmxTracker,
         address _feeGlpTracker,
         address _stakedGlpTracker,
-        address _glpManager
+        address _klpManager
     ) external onlyGov {
         require(!isInitialized, "RewardRouter: already initialized");
         isInitialized = true;
@@ -79,7 +79,7 @@ contract RewardRouter is ReentrancyGuard, Governable {
         feeGlpTracker = _feeGlpTracker;
         stakedGlpTracker = _stakedGlpTracker;
 
-        glpManager = _glpManager;
+        klpManager = _klpManager;
     }
 
     // to help users who accidentally send their tokens to this contract
@@ -118,7 +118,7 @@ contract RewardRouter is ReentrancyGuard, Governable {
         require(_amount > 0, "RewardRouter: invalid _amount");
 
         address account = msg.sender;
-        uint256 glpAmount = IGlpManager(glpManager).addLiquidityForAccount(account, account, _token, _amount, _minUsdg, _minGlp);
+        uint256 glpAmount = IKlpManager(klpManager).addLiquidityForAccount(account, account, _token, _amount, _minUsdg, _minGlp);
         IRewardTracker(feeGlpTracker).stakeForAccount(account, account, glp, glpAmount);
         IRewardTracker(stakedGlpTracker).stakeForAccount(account, account, feeGlpTracker, glpAmount);
 
@@ -130,11 +130,11 @@ contract RewardRouter is ReentrancyGuard, Governable {
     function mintAndStakeGlpETH(uint256 _minUsdg, uint256 _minGlp) external payable nonReentrant returns (uint256) {
         require(msg.value > 0, "RewardRouter: invalid msg.value");
 
-        IWETH(weth).deposit{value: msg.value}();
-        IERC20(weth).approve(glpManager, msg.value);
+        IWETH(weth).deposit{value : msg.value}();
+        IERC20(weth).approve(klpManager, msg.value);
 
         address account = msg.sender;
-        uint256 glpAmount = IGlpManager(glpManager).addLiquidityForAccount(address(this), account, weth, msg.value, _minUsdg, _minGlp);
+        uint256 glpAmount = IKlpManager(klpManager).addLiquidityForAccount(address(this), account, weth, msg.value, _minUsdg, _minGlp);
 
         IRewardTracker(feeGlpTracker).stakeForAccount(account, account, glp, glpAmount);
         IRewardTracker(stakedGlpTracker).stakeForAccount(account, account, feeGlpTracker, glpAmount);
@@ -150,7 +150,7 @@ contract RewardRouter is ReentrancyGuard, Governable {
         address account = msg.sender;
         IRewardTracker(stakedGlpTracker).unstakeForAccount(account, feeGlpTracker, _glpAmount, account);
         IRewardTracker(feeGlpTracker).unstakeForAccount(account, glp, _glpAmount, account);
-        uint256 amountOut = IGlpManager(glpManager).removeLiquidityForAccount(account, _tokenOut, _glpAmount, _minOut, _receiver);
+        uint256 amountOut = IKlpManager(klpManager).removeLiquidityForAccount(account, _tokenOut, _glpAmount, _minOut, _receiver);
 
         emit UnstakeGlp(account, _glpAmount);
 
@@ -163,7 +163,7 @@ contract RewardRouter is ReentrancyGuard, Governable {
         address account = msg.sender;
         IRewardTracker(stakedGlpTracker).unstakeForAccount(account, feeGlpTracker, _glpAmount, account);
         IRewardTracker(feeGlpTracker).unstakeForAccount(account, glp, _glpAmount, account);
-        uint256 amountOut = IGlpManager(glpManager).removeLiquidityForAccount(account, weth, _glpAmount, _minOut, address(this));
+        uint256 amountOut = IKlpManager(klpManager).removeLiquidityForAccount(account, weth, _glpAmount, _minOut, address(this));
 
         IWETH(weth).withdraw(amountOut);
 

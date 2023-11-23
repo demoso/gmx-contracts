@@ -58,7 +58,7 @@ describe("PositionRouter", function () {
       5 * 24 * 60 * 60, // _buffer
       ethers.constants.AddressZero, // _tokenManager
       ethers.constants.AddressZero, // _mintReceiver
-      ethers.constants.AddressZero, // _glpManager
+      ethers.constants.AddressZero, // _klpManager
       ethers.constants.AddressZero, // _rewardRouter
       expandDecimals(1000, 18), // _maxTokenSupply
       10, // marginFeeBasisPoints 0.1%
@@ -2744,18 +2744,18 @@ describe("PositionRouter", function () {
   })
 
   describe("Updates short tracker data", () => {
-    let glpManager
+    let klpManager
 
     beforeEach(async () => {
       const glp = await deployContract("GLP", [])
-      glpManager = await deployContract("GlpManager", [
+      klpManager = await deployContract("KlpManager", [
         vault.address,
         usdg.address,
         glp.address,
         shortsTracker.address,
         24 * 60 * 60
       ])
-      await glpManager.setShortsTrackerAveragePriceWeight(10000)
+      await klpManager.setShortsTrackerAveragePriceWeight(10000)
 
       await router.addPlugin(positionRouter.address)
       await router.connect(user0).approvePlugin(positionRouter.address)
@@ -2803,7 +2803,7 @@ describe("PositionRouter", function () {
       expect(hasProfit, "has profit 0").to.be.false
       expect(delta, "delta 0").to.be.equal(toUsd(100))
 
-      let aumBefore = await glpManager.getAum(true)
+      let aumBefore = await klpManager.getAum(true)
 
       await positionRouter.connect(user0).createIncreasePosition(...params, { value: executionFee })
       key = await positionRouter.getRequestKey(user0.address, 2)
@@ -2816,7 +2816,7 @@ describe("PositionRouter", function () {
       expect(hasProfit, "has profit 1").to.be.false
       expect(delta, "delta 1").to.be.closeTo(toUsd(100), 100)
 
-      let aumAfter = await glpManager.getAum(true)
+      let aumAfter = await klpManager.getAum(true)
       expect(aumAfter).to.be.closeTo(aumBefore, 100)
     })
 
@@ -2864,7 +2864,7 @@ describe("PositionRouter", function () {
       expect(hasProfit, "has profit 0").to.be.false
       expect(delta, "delta 0").to.be.equal(toUsd(100))
 
-      let aumBefore = await glpManager.getAum(true)
+      let aumBefore = await klpManager.getAum(true)
 
       await positionRouter.connect(user0).createDecreasePosition(...decreaseParams, { value: executionFee })
       key = await positionRouter.getRequestKey(user0.address, 1)
@@ -2877,13 +2877,13 @@ describe("PositionRouter", function () {
       expect(hasProfit, "has profit 1").to.be.false
       expect(delta, "delta 1").to.be.equal(toUsd(90))
 
-      expect(await glpManager.getAum(true), "aum 0").to.be.closeTo(aumBefore, 100)
+      expect(await klpManager.getAum(true), "aum 0").to.be.closeTo(aumBefore, 100)
 
       await bnbPriceFeed.setLatestAnswer(toChainlinkPrice(300))
       await bnbPriceFeed.setLatestAnswer(toChainlinkPrice(300))
       await bnbPriceFeed.setLatestAnswer(toChainlinkPrice(300))
 
-      aumBefore = await glpManager.getAum(true)
+      aumBefore = await klpManager.getAum(true)
 
       await positionRouter.connect(user0).createDecreasePosition(...decreaseParams, { value: executionFee })
       key = await positionRouter.getRequestKey(user0.address, 2)
@@ -2896,7 +2896,7 @@ describe("PositionRouter", function () {
       expect(hasProfit, "has profit 2").to.be.false
       expect(delta, "delta 2").to.be.equal(toUsd(0))
 
-      expect(await glpManager.getAum(true), "aum 1").to.be.closeTo(aumBefore, 100)
+      expect(await klpManager.getAum(true), "aum 1").to.be.closeTo(aumBefore, 100)
     })
   })
 })

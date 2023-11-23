@@ -4,12 +4,12 @@ pragma solidity 0.6.12;
 
 import "../libraries/math/SafeMath.sol";
 import "../libraries/token/IERC20.sol";
-import "../core/interfaces/IGlpManager.sol";
+import "../core/interfaces/IKlpManager.sol";
 
 contract GlpBalance {
     using SafeMath for uint256;
 
-    IGlpManager public glpManager;
+    IKlpManager public klpManager;
     address public stakedGlpTracker;
 
     mapping (address => mapping (address => uint256)) public allowances;
@@ -17,10 +17,10 @@ contract GlpBalance {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 
     constructor(
-        IGlpManager _glpManager,
+        IKlpManager _klpManager,
         address _stakedGlpTracker
     ) public {
-        glpManager = _glpManager;
+        klpManager = _klpManager;
         stakedGlpTracker = _stakedGlpTracker;
     }
 
@@ -59,7 +59,7 @@ contract GlpBalance {
         require(_recipient != address(0), "GlpBalance: transfer to the zero address");
 
         require(
-            glpManager.lastAddedAt(_sender).add(glpManager.cooldownDuration()) <= block.timestamp,
+            klpManager.lastAddedAt(_sender).add(klpManager.cooldownDuration()) <= block.timestamp,
             "GlpBalance: cooldown duration not yet passed"
         );
 

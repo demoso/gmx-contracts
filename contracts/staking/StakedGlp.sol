@@ -5,7 +5,7 @@ pragma solidity 0.6.12;
 import "../libraries/math/SafeMath.sol";
 import "../libraries/token/IERC20.sol";
 
-import "../core/interfaces/IGlpManager.sol";
+import "../core/interfaces/IKlpManager.sol";
 
 import "./interfaces/IRewardTracker.sol";
 import "./interfaces/IRewardTracker.sol";
@@ -21,7 +21,7 @@ contract StakedGlp {
     uint8 public constant decimals = 18;
 
     address public glp;
-    IGlpManager public glpManager;
+    IKlpManager public klpManager;
     address public stakedGlpTracker;
     address public feeGlpTracker;
 
@@ -31,12 +31,12 @@ contract StakedGlp {
 
     constructor(
         address _glp,
-        IGlpManager _glpManager,
+        IKlpManager _klpManager,
         address _stakedGlpTracker,
         address _feeGlpTracker
     ) public {
         glp = _glp;
-        glpManager = _glpManager;
+        klpManager = _klpManager;
         stakedGlpTracker = _stakedGlpTracker;
         feeGlpTracker = _feeGlpTracker;
     }
@@ -84,7 +84,7 @@ contract StakedGlp {
         require(_recipient != address(0), "StakedGlp: transfer to the zero address");
 
         require(
-            glpManager.lastAddedAt(_sender).add(glpManager.cooldownDuration()) <= block.timestamp,
+            klpManager.lastAddedAt(_sender).add(klpManager.cooldownDuration()) <= block.timestamp,
             "StakedGlp: cooldown duration not yet passed"
         );
 
