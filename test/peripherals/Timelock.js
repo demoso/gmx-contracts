@@ -15,7 +15,7 @@ describe("Timelock", function () {
   const [wallet, user0, user1, user2, user3, rewardManager, tokenManager, mintReceiver, positionRouter] = provider.getWallets()
   let vault
   let klpManager
-  let glp
+  let klp
   let vaultUtils
   let vaultPriceFeed
   let usdg
@@ -50,8 +50,8 @@ describe("Timelock", function () {
     router = await deployContract("Router", [vault.address, usdg.address, bnb.address])
     vaultPriceFeed = await deployContract("VaultPriceFeed", [])
 
-    glp = await deployContract("GLP", [])
-    klpManager = await deployContract("KlpManager", [vault.address, usdg.address, glp.address, ethers.constants.AddressZero, 24 * 60 * 60])
+    klp = await deployContract("KLP", [])
+    klpManager = await deployContract("KlpManager", [vault.address, usdg.address, klp.address, ethers.constants.AddressZero, 24 * 60 * 60])
 
     const initVaultResult = await initVault(vault, router, usdg, vaultPriceFeed)
     vaultUtils = initVaultResult.vaultUtils
@@ -67,8 +67,8 @@ describe("Timelock", function () {
 
     await vault.setPriceFeed(user3.address)
 
-    feeGlpTracker = await deployContract("RewardTracker", ["Fee GLP", "fGLP"])
-    stakedKlpTracker = await deployContract("RewardTracker", ["Fee + Staked GLP", "fsGLP"])
+    feeGlpTracker = await deployContract("RewardTracker", ["Fee KLP", "fKLP"])
+    stakedKlpTracker = await deployContract("RewardTracker", ["Fee + Staked KLP", "fsKLP"])
 
     rewardRouter = await deployContract("RewardRouterV2", [])
     await rewardRouter.initialize(
@@ -345,16 +345,16 @@ describe("Timelock", function () {
     await expect(timelock.connect(user0).initKlpManager())
       .to.be.revertedWith("Timelock: forbidden")
 
-    await glp.setGov(timelock.address)
+    await klp.setGov(timelock.address)
     await usdg.setGov(timelock.address)
 
-    expect(await glp.isMinter(klpManager.address)).eq(false)
+    expect(await klp.isMinter(klpManager.address)).eq(false)
     expect(await usdg.vaults(klpManager.address)).eq(false)
     expect(await vault.isManager(klpManager.address)).eq(false)
 
     await timelock.initKlpManager()
 
-    expect(await glp.isMinter(klpManager.address)).eq(true)
+    expect(await klp.isMinter(klpManager.address)).eq(true)
     expect(await usdg.vaults(klpManager.address)).eq(true)
     expect(await vault.isManager(klpManager.address)).eq(true)
   })

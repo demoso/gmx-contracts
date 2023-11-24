@@ -116,7 +116,7 @@ async function getArbValues() {
   const stakedGmxSupply = await stakedGmx.totalSupply()
   const {totalTransferAmount: keeperCosts} = await getArbKeeperValues()
   const klpManager = await contractAt("KlpManager", "0x321F653eED006AD1C29D174e17d96351BDe22649", signer)
-  const glpAum = await klpManager.getAum(true)
+  const klpAum = await klpManager.getAum(true)
 
   return {
     vault,
@@ -129,7 +129,7 @@ async function getArbValues() {
     stakedGmxSupply,
     keeperCosts,
     klpManager,
-    glpAum
+    klpAum
   }
 }
 
@@ -146,7 +146,7 @@ async function getAvaxValues() {
   const stakedGmxSupply = await stakedGmx.totalSupply()
   const {totalTransferAmount: keeperCosts} = await getAvaxKeeperValues()
   const klpManager = await contractAt("KlpManager", "0xe1ae4d4b06A5Fe1fc288f6B4CD72f9F8323B107F", signer)
-  const glpAum = await klpManager.getAum(true)
+  const klpAum = await klpManager.getAum(true)
 
   return {
     vault,
@@ -159,7 +159,7 @@ async function getAvaxValues() {
     stakedGmxSupply,
     keeperCosts,
     klpManager,
-    glpAum
+    klpAum
   }
 }
 

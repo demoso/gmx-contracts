@@ -62,13 +62,13 @@ async function main() {
   await printRewardTracker(stakedKlpTracker, "stakedKlpTracker")
   await printRewardTracker(feeGlpTracker, "feeGlpTracker")
 
-  const glp = await contractAt("MintableBaseToken", "0x01234181085565ed162a948b6a5e88758CD7c7b8")
+  const klp = await contractAt("MintableBaseToken", "0x01234181085565ed162a948b6a5e88758CD7c7b8")
   const usdg = await contractAt("USDG", "0xc0253c3cC6aa5Ab407b5795a04c28fB063273894")
   // const gmx = await contractAt("MintableBaseToken", "0x62edc0692BD897D2295872a9FFCac5425011c661")
   // const esGmx = await contractAt("MintableBaseToken", "0xFf1489227BbAAC61a9209A08929E4c2a526DdD17")
   const bnGmx = await contractAt("MintableBaseToken", "0x8087a341D32D445d9aC8aCc9c14F5781E04A26d2")
 
-  await printToken(glp, "glp")
+  await printToken(klp, "klp")
   await printUsdg(usdg, "usdg")
   // await printToken(gmx, "gmx")
   // await printToken(esGmx, "esGmx")
@@ -77,7 +77,7 @@ async function main() {
   // const prevGov = await contractAt("Timelock", "0x4a3930b629f899fe19c1f280c73a376382d61a78")
   // const nextGov = await contractAt("Timelock", "0x09214C0A3594fbcad59A58099b0A63E2B29b15B8")
 
-  // await signalGov(prevGov, glp, nextGov, "glp")
+  // await signalGov(prevGov, klp, nextGov, "klp")
   // await signalGov(prevGov, gmx, nextGov, "gmx")
   // await signalGov(prevGov, esGmx, nextGov, "esGmx")
   // await signalGov(prevGov, bnGmx, nextGov, "bnGmx")
@@ -99,7 +99,7 @@ async function main() {
   await updateRewardTrackerGov(stakedKlpTracker, "stakedKlpTracker")
   await updateRewardTrackerGov(feeGlpTracker, "feeGlpTracker")
 
-  await updateGov(glp, "glp")
+  await updateGov(klp, "klp")
   await updateGov(usdg, "usdg")
   // await updateGov(gmx, "gmx")
   // await updateGov(esGmx, "esGmx")

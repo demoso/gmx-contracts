@@ -30,7 +30,7 @@ describe("PositionManager", function () {
   let deployTimelock
 
   let klpManager
-  let glp
+  let klp
 
   beforeEach(async () => {
     bnb = await deployContract("Token", [])
@@ -77,7 +77,7 @@ describe("PositionManager", function () {
     await router.addPlugin(orderBook.address)
     await router.connect(user0).approvePlugin(orderBook.address)
 
-    glp = await deployContract("GLP", [])
+    klp = await deployContract("KLP", [])
 
     const shortsTracker = await deployContract("ShortsTracker", [vault.address])
     await shortsTracker.setIsGlobalShortDataReady(true)
@@ -85,7 +85,7 @@ describe("PositionManager", function () {
     klpManager = await deployContract("KlpManager", [
       vault.address,
       usdg.address,
-      glp.address,
+      klp.address,
       shortsTracker.address,
       24 * 60 * 60
     ])
@@ -796,7 +796,7 @@ describe("PositionManager next short data calculations", function () {
   let shortsTracker
 
   let klpManager
-  let glp
+  let klp
 
   beforeEach(async () => {
     let tmp = await Promise.all([
@@ -853,12 +853,12 @@ describe("PositionManager next short data calculations", function () {
     await router.addPlugin(orderBook.address)
     await router.connect(user0).approvePlugin(orderBook.address)
 
-    glp = await deployContract("GLP", [])
+    klp = await deployContract("KLP", [])
     shortsTracker = await deployContract("ShortsTracker", [vault.address])
     klpManager = await deployContract("KlpManager", [
       vault.address,
       usdg.address,
-      glp.address,
+      klp.address,
       shortsTracker.address,
       24 * 60 * 60
     ])

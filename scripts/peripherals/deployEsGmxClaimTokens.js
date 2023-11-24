@@ -2,9 +2,9 @@ const { deployContract, contractAt, writeTmpAddresses } = require("../shared/hel
 
 async function main() {
   await deployContract("MintableBaseToken", ["VestingOption", "ARB:GMX", 0])
-  await deployContract("MintableBaseToken", ["VestingOption", "ARB:GLP", 0])
+  await deployContract("MintableBaseToken", ["VestingOption", "ARB:KLP", 0])
   await deployContract("MintableBaseToken", ["VestingOption", "AVAX:GMX", 0])
-  await deployContract("MintableBaseToken", ["VestingOption", "AVAX:GLP", 0])
+  await deployContract("MintableBaseToken", ["VestingOption", "AVAX:KLP", 0])
 }
 
 main()

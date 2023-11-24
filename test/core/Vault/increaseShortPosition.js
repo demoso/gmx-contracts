@@ -14,7 +14,7 @@ describe("Vault.increaseShortPosition", function () {
   let vault
   let klpManager
   let vaultPriceFeed
-  let glp
+  let klp
   let usdg
   let router
   let bnb
@@ -37,13 +37,13 @@ describe("Vault.increaseShortPosition", function () {
     daiPriceFeed = await deployContract("PriceFeed", [])
 
     vault = await deployContract("Vault", [])
-    glp = await deployContract("GLP", [])
+    klp = await deployContract("KLP", [])
     usdg = await deployContract("USDG", [vault.address])
     router = await deployContract("Router", [vault.address, usdg.address, bnb.address])
     vaultPriceFeed = await deployContract("VaultPriceFeed", [])
 
     const initVaultResult = await initVault(vault, router, usdg, vaultPriceFeed)
-    klpManager = await deployContract("KlpManager", [vault.address, usdg.address, glp.address, ethers.constants.AddressZero, 24 * 60 * 60])
+    klpManager = await deployContract("KlpManager", [vault.address, usdg.address, klp.address, ethers.constants.AddressZero, 24 * 60 * 60])
 
     distributor0 = await deployContract("TimeDistributor", [])
     yieldTracker0 = await deployContract("YieldTracker", [usdg.address])

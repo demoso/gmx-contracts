@@ -9,14 +9,14 @@ async function main() {
   const vestingDuration = 365 * 24 * 60 * 60
 
   const klpManager = await contractAt("KlpManager", "0xe1ae4d4b06A5Fe1fc288f6B4CD72f9F8323B107F")
-  const glp = await contractAt("GLP", "0x01234181085565ed162a948b6a5e88758CD7c7b8")
+  const klp = await contractAt("KLP", "0x01234181085565ed162a948b6a5e88758CD7c7b8")
 
   const gmx = await contractAt("GMX", "0x62edc0692BD897D2295872a9FFCac5425011c661");
   const esGmx = await contractAt("EsGMX", "0xFf1489227BbAAC61a9209A08929E4c2a526DdD17");
   const bnGmx = await deployContract("MintableBaseToken", ["Bonus GMX", "bnGMX", 0]);
 
   await sendTxn(esGmx.setInPrivateTransferMode(true), "esGmx.setInPrivateTransferMode")
-  await sendTxn(glp.setInPrivateTransferMode(true), "glp.setInPrivateTransferMode")
+  await sendTxn(klp.setInPrivateTransferMode(true), "klp.setInPrivateTransferMode")
 
   const stakedGmxTracker = await deployContract("RewardTracker", ["Staked GMX", "sGMX"])
   const stakedGmxDistributor = await deployContract("RewardDistributor", [esGmx.address, stakedGmxTracker.address])
@@ -33,12 +33,12 @@ async function main() {
   await sendTxn(feeGmxTracker.initialize([bonusGmxTracker.address, bnGmx.address], feeGmxDistributor.address), "feeGmxTracker.initialize")
   await sendTxn(feeGmxDistributor.updateLastDistributionTime(), "feeGmxDistributor.updateLastDistributionTime")
 
-  const feeGlpTracker = await deployContract("RewardTracker", ["Fee GLP", "fGLP"])
+  const feeGlpTracker = await deployContract("RewardTracker", ["Fee KLP", "fKLP"])
   const feeGlpDistributor = await deployContract("RewardDistributor", [nativeToken.address, feeGlpTracker.address])
-  await sendTxn(feeGlpTracker.initialize([glp.address], feeGlpDistributor.address), "feeGlpTracker.initialize")
+  await sendTxn(feeGlpTracker.initialize([klp.address], feeGlpDistributor.address), "feeGlpTracker.initialize")
   await sendTxn(feeGlpDistributor.updateLastDistributionTime(), "feeGlpDistributor.updateLastDistributionTime")
 
-  const stakedKlpTracker = await deployContract("RewardTracker", ["Fee + Staked GLP", "fsGLP"])
+  const stakedKlpTracker = await deployContract("RewardTracker", ["Fee + Staked KLP", "fsKLP"])
   const stakedKlpDistributor = await deployContract("RewardDistributor", [esGmx.address, stakedKlpTracker.address])
   await sendTxn(stakedKlpTracker.initialize([feeGlpTracker.address], stakedKlpDistributor.address), "stakedKlpTracker.initialize")
   await sendTxn(stakedKlpDistributor.updateLastDistributionTime(), "stakedKlpDistributor.updateLastDistributionTime")
@@ -66,9 +66,9 @@ async function main() {
     stakedGmxTracker.address, // _rewardTracker
   ])
 
-  const glpVester = await deployContract("Vester", [
-    "Vested GLP", // _name
-    "vGLP", // _symbol
+  const klpVester = await deployContract("Vester", [
+    "Vested KLP", // _name
+    "vKLP", // _symbol
     vestingDuration, // _vestingDuration
     esGmx.address, // _esToken
     stakedKlpTracker.address, // _pairToken
@@ -82,7 +82,7 @@ async function main() {
     gmx.address,
     esGmx.address,
     bnGmx.address,
-    glp.address,
+    klp.address,
     stakedGmxTracker.address,
     bonusGmxTracker.address,
     feeGmxTracker.address,
@@ -90,7 +90,7 @@ async function main() {
     stakedKlpTracker.address,
     klpManager.address,
     gmxVester.address,
-    glpVester.address
+    klpVester.address
   ), "rewardRouter.initialize")
 
   await sendTxn(klpManager.setHandler(rewardRouter.address), "klpManager.setHandler(rewardRouter)")
@@ -115,8 +115,8 @@ async function main() {
 
   // allow stakedKlpTracker to stake feeGlpTracker
   await sendTxn(feeGlpTracker.setHandler(stakedKlpTracker.address, true), "feeGlpTracker.setHandler(stakedKlpTracker)")
-  // allow feeGlpTracker to stake glp
-  await sendTxn(glp.setHandler(feeGlpTracker.address, true), "glp.setHandler(feeGlpTracker)")
+  // allow feeGlpTracker to stake klp
+  await sendTxn(klp.setHandler(feeGlpTracker.address, true), "klp.setHandler(feeGlpTracker)")
 
   // allow rewardRouter to stake in feeGlpTracker
   await sendTxn(feeGlpTracker.setHandler(rewardRouter.address, true), "feeGlpTracker.setHandler(rewardRouter)")
@@ -128,16 +128,16 @@ async function main() {
   await sendTxn(esGmx.setHandler(stakedKlpDistributor.address, true), "esGmx.setHandler(stakedKlpDistributor)")
   await sendTxn(esGmx.setHandler(stakedKlpTracker.address, true), "esGmx.setHandler(stakedKlpTracker)")
   await sendTxn(esGmx.setHandler(gmxVester.address, true), "esGmx.setHandler(gmxVester)")
-  await sendTxn(esGmx.setHandler(glpVester.address, true), "esGmx.setHandler(glpVester)")
+  await sendTxn(esGmx.setHandler(klpVester.address, true), "esGmx.setHandler(klpVester)")
 
   await sendTxn(esGmx.setMinter(gmxVester.address, true), "esGmx.setMinter(gmxVester)")
-  await sendTxn(esGmx.setMinter(glpVester.address, true), "esGmx.setMinter(glpVester)")
+  await sendTxn(esGmx.setMinter(klpVester.address, true), "esGmx.setMinter(klpVester)")
 
   await sendTxn(gmxVester.setHandler(rewardRouter.address, true), "gmxVester.setHandler(rewardRouter)")
-  await sendTxn(glpVester.setHandler(rewardRouter.address, true), "glpVester.setHandler(rewardRouter)")
+  await sendTxn(klpVester.setHandler(rewardRouter.address, true), "klpVester.setHandler(rewardRouter)")
 
   await sendTxn(feeGmxTracker.setHandler(gmxVester.address, true), "feeGmxTracker.setHandler(gmxVester)")
-  await sendTxn(stakedKlpTracker.setHandler(glpVester.address, true), "stakedKlpTracker.setHandler(glpVester)")
+  await sendTxn(stakedKlpTracker.setHandler(klpVester.address, true), "stakedKlpTracker.setHandler(klpVester)")
 }
 
 main()

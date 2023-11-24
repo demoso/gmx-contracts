@@ -15,7 +15,7 @@ describe("PriceFeedTimelock", function () {
   const [wallet, user0, user1, user2, user3, rewardManager, tokenManager, mintReceiver, positionRouter] = provider.getWallets()
   let vault
   let klpManager
-  let glp
+  let klp
   let vaultUtils
   let vaultPriceFeed
   let usdg
@@ -48,8 +48,8 @@ describe("PriceFeedTimelock", function () {
     router = await deployContract("Router", [vault.address, usdg.address, bnb.address])
     vaultPriceFeed = await deployContract("VaultPriceFeed", [])
 
-    glp = await deployContract("GLP", [])
-    klpManager = await deployContract("KlpManager", [vault.address, usdg.address, glp.address, ethers.constants.AddressZero, 24 * 60 * 60])
+    klp = await deployContract("KLP", [])
+    klpManager = await deployContract("KlpManager", [vault.address, usdg.address, klp.address, ethers.constants.AddressZero, 24 * 60 * 60])
 
     const initVaultResult = await initVault(vault, router, usdg, vaultPriceFeed)
     vaultUtils = initVaultResult.vaultUtils

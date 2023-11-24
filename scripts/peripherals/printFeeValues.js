@@ -26,7 +26,7 @@ async function main() {
     `\n` +
     `$${formatAmount(feeReference.arbFees, 30, 2, true)} (ARB), $${formatAmount(feeReference.avaxFees, 30, 2, true)} (AVAX), $${formatAmount(uniswapFees, 30, 2, true)} (GMX-ETH)\n` +
     `\n` +
-    `To buy and stake $GMX / $GLP: https://gmx.io\n` +
+    `To buy and stake $GMX / $KLP: https://gmx.io\n` +
     `\n`
 
   console.info(text)

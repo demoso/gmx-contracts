@@ -21,7 +21,7 @@ async function main() {
   const feeGlpTracker = await contractAt("RewardTracker", "0x4e971a87900b931fF39d1Aad67697F49835400b6")
   const stakedKlpTracker = await contractAt("RewardTracker", "0x1aDDD80E6039594eE970E5872D247bf0414C8903")
 
-  const glp = await contractAt("GLP", "0x4277f8F2c384827B5273592FF7CeBd9f2C1ac258")
+  const klp = await contractAt("KLP", "0x4277f8F2c384827B5273592FF7CeBd9f2C1ac258")
   const klpManager = await contractAt("KlpManager", "0x321F653eED006AD1C29D174e17d96351BDe22649")
 
   console.log("klpManager", klpManager.address)
@@ -33,7 +33,7 @@ async function main() {
     gmx.address,
     esGmx.address,
     bnGmx.address,
-    glp.address,
+    klp.address,
     stakedGmxTracker.address,
     bonusGmxTracker.address,
     feeGmxTracker.address,

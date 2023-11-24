@@ -35,7 +35,7 @@ async function main() {
   const feeAlpTracker = {address: AddressZero}
 
   const klpManager = {address: AddressZero}
-  const glp = {address: AddressZero}
+  const klp = {address: AddressZero}
 
   await sendTxn(stakedGmxTracker.setInPrivateTransferMode(true), "stakedGmxTracker.setInPrivateTransferMode")
   await sendTxn(stakedGmxTracker.setInPrivateStakingMode(true), "stakedGmxTracker.setInPrivateStakingMode")
@@ -52,7 +52,7 @@ async function main() {
     esGmx.address,
     bnGmx.address,
     bnAlp.address,
-    glp.address,
+    klp.address,
     alp.address,
     stakedGmxTracker.address,
     bonusGmxTracker.address,

@@ -13,7 +13,7 @@ describe("KlpManager", function () {
   const [wallet, rewardRouter, user0, user1, user2, user3] = provider.getWallets()
   let vault
   let klpManager
-  let glp
+  let klp
   let usdg
   let router
   let vaultPriceFeed
@@ -52,7 +52,7 @@ describe("KlpManager", function () {
     usdg = await deployContract("USDG", [vault.address])
     router = await deployContract("Router", [vault.address, usdg.address, bnb.address])
     vaultPriceFeed = await deployContract("VaultPriceFeed", [])
-    glp = await deployContract("GLP", [])
+    klp = await deployContract("KLP", [])
 
     await initVault(vault, router, usdg, vaultPriceFeed)
 
@@ -62,7 +62,7 @@ describe("KlpManager", function () {
     klpManager = await deployContract("KlpManager", [
       vault.address,
       usdg.address,
-      glp.address,
+      klp.address,
       shortsTracker.address,
       24 * 60 * 60
     ])
@@ -93,8 +93,8 @@ describe("KlpManager", function () {
     await bnbPriceFeed.setLatestAnswer(toChainlinkPrice(300))
     await vault.setTokenConfig(...getBnbConfig(bnb, bnbPriceFeed))
 
-    await glp.setInPrivateTransferMode(true)
-    await glp.setMinter(klpManager.address, true)
+    await klp.setInPrivateTransferMode(true)
+    await klp.setMinter(klpManager.address, true)
 
     await vault.setInManagerMode(true)
   })
@@ -103,7 +103,7 @@ describe("KlpManager", function () {
     expect(await klpManager.gov()).eq(wallet.address)
     expect(await klpManager.vault()).eq(vault.address)
     expect(await klpManager.usdg()).eq(usdg.address)
-    expect(await klpManager.glp()).eq(glp.address)
+    expect(await klpManager.klp()).eq(klp.address)
     expect(await klpManager.cooldownDuration()).eq(24 * 60 * 60)
   })
 
@@ -209,7 +209,7 @@ describe("KlpManager", function () {
     expect(await dai.balanceOf(user0.address)).eq(expandDecimals(100, 18))
     expect(await dai.balanceOf(vault.address)).eq(0)
     expect(await usdg.balanceOf(klpManager.address)).eq(0)
-    expect(await glp.balanceOf(user0.address)).eq(0)
+    expect(await klp.balanceOf(user0.address)).eq(0)
     expect(await klpManager.lastAddedAt(user0.address)).eq(0)
     expect(await klpManager.getAumInUsdg(true)).eq(0)
 
@@ -226,8 +226,8 @@ describe("KlpManager", function () {
     expect(await dai.balanceOf(user0.address)).eq(0)
     expect(await dai.balanceOf(vault.address)).eq(expandDecimals(100, 18))
     expect(await usdg.balanceOf(klpManager.address)).eq("99700000000000000000") // 99.7
-    expect(await glp.balanceOf(user0.address)).eq("99700000000000000000")
-    expect(await glp.totalSupply()).eq("99700000000000000000")
+    expect(await klp.balanceOf(user0.address)).eq("99700000000000000000")
+    expect(await klp.totalSupply()).eq("99700000000000000000")
     expect(await klpManager.lastAddedAt(user0.address)).eq(blockTime)
     expect(await klpManager.getAumInUsdg(true)).eq("99700000000000000000")
     expect(await klpManager.getAumInUsdg(false)).eq("99700000000000000000")
@@ -244,14 +244,14 @@ describe("KlpManager", function () {
     blockTime = await getBlockTime(provider)
 
     expect(await usdg.balanceOf(klpManager.address)).eq("398800000000000000000") // 398.8
-    expect(await glp.balanceOf(user0.address)).eq("99700000000000000000") // 99.7
-    expect(await glp.balanceOf(user1.address)).eq("299100000000000000000") // 299.1
-    expect(await glp.totalSupply()).eq("398800000000000000000")
+    expect(await klp.balanceOf(user0.address)).eq("99700000000000000000") // 99.7
+    expect(await klp.balanceOf(user1.address)).eq("299100000000000000000") // 299.1
+    expect(await klp.totalSupply()).eq("398800000000000000000")
     expect(await klpManager.lastAddedAt(user1.address)).eq(blockTime)
     expect(await klpManager.getAumInUsdg(true)).eq("498500000000000000000")
     expect(await klpManager.getAumInUsdg(false)).eq("398800000000000000000")
 
-    await expect(glp.connect(user1).transfer(user2.address, expandDecimals(1, 18)))
+    await expect(klp.connect(user1).transfer(user2.address, expandDecimals(1, 18)))
       .to.be.revertedWith("BaseToken: msg.sender not whitelisted")
 
     await bnbPriceFeed.setLatestAnswer(toChainlinkPrice(400))
@@ -280,7 +280,7 @@ describe("KlpManager", function () {
       "1000000",
       expandDecimals(598, 18),
       expandDecimals(399, 18)
-    )).to.be.revertedWith("KlpManager: insufficient GLP output")
+    )).to.be.revertedWith("KlpManager: insufficient KLP output")
 
     await klpManager.connect(user2).addLiquidity(
       btc.address,
@@ -292,10 +292,10 @@ describe("KlpManager", function () {
     blockTime = await getBlockTime(provider)
 
     expect(await usdg.balanceOf(klpManager.address)).eq("997000000000000000000") // 997
-    expect(await glp.balanceOf(user0.address)).eq("99700000000000000000") // 99.7
-    expect(await glp.balanceOf(user1.address)).eq("299100000000000000000") // 299.1
-    expect(await glp.balanceOf(user2.address)).eq("398800000000000000000") // 398.8
-    expect(await glp.totalSupply()).eq("797600000000000000000") // 797.6
+    expect(await klp.balanceOf(user0.address)).eq("99700000000000000000") // 99.7
+    expect(await klp.balanceOf(user1.address)).eq("299100000000000000000") // 299.1
+    expect(await klp.balanceOf(user2.address)).eq("398800000000000000000") // 398.8
+    expect(await klp.totalSupply()).eq("797600000000000000000") // 797.6
     expect(await klpManager.lastAddedAt(user2.address)).eq(blockTime)
     expect(await klpManager.getAumInUsdg(true)).eq("1196400000000000000000") // 1196.4
     expect(await klpManager.getAumInUsdg(false)).eq("1096700000000000000000") // 1096.7
@@ -318,7 +318,7 @@ describe("KlpManager", function () {
     )).to.be.revertedWith("Vault: poolAmount exceeded")
 
     expect(await dai.balanceOf(user0.address)).eq(0)
-    expect(await glp.balanceOf(user0.address)).eq("99700000000000000000") // 99.7
+    expect(await klp.balanceOf(user0.address)).eq("99700000000000000000") // 99.7
 
     await klpManager.connect(user0).removeLiquidity(
       dai.address,
@@ -329,7 +329,7 @@ describe("KlpManager", function () {
 
     expect(await dai.balanceOf(user0.address)).eq("98703000000000000000") // 98.703, 72 * 1096.7 / 797.6 => 99
     expect(await bnb.balanceOf(user0.address)).eq(0)
-    expect(await glp.balanceOf(user0.address)).eq("27700000000000000000") // 27.7
+    expect(await klp.balanceOf(user0.address)).eq("27700000000000000000") // 27.7
 
     await klpManager.connect(user0).removeLiquidity(
       bnb.address,
@@ -340,14 +340,14 @@ describe("KlpManager", function () {
 
     expect(await dai.balanceOf(user0.address)).eq("98703000000000000000")
     expect(await bnb.balanceOf(user0.address)).eq("75946475000000000") // 0.075946475
-    expect(await glp.balanceOf(user0.address)).eq(0)
+    expect(await klp.balanceOf(user0.address)).eq(0)
 
-    expect(await glp.totalSupply()).eq("697900000000000000000") // 697.9
+    expect(await klp.totalSupply()).eq("697900000000000000000") // 697.9
     expect(await klpManager.getAumInUsdg(true)).eq("1059312500000000000000") // 1059.3125
     expect(await klpManager.getAumInUsdg(false)).eq("967230000000000000000") // 967.23
 
     expect(await bnb.balanceOf(user1.address)).eq(0)
-    expect(await glp.balanceOf(user1.address)).eq("299100000000000000000")
+    expect(await klp.balanceOf(user1.address)).eq("299100000000000000000")
 
     await klpManager.connect(user1).removeLiquidity(
       bnb.address,
@@ -357,14 +357,14 @@ describe("KlpManager", function () {
     )
 
     expect(await bnb.balanceOf(user1.address)).eq("826567122857142856") // 0.826567122857142856
-    expect(await glp.balanceOf(user1.address)).eq(0)
+    expect(await klp.balanceOf(user1.address)).eq(0)
 
-    expect(await glp.totalSupply()).eq("398800000000000000000") // 398.8
+    expect(await klp.totalSupply()).eq("398800000000000000000") // 398.8
     expect(await klpManager.getAumInUsdg(true)).eq("644785357142857143000") // 644.785357142857143
     expect(await klpManager.getAumInUsdg(false)).eq("635608285714285714400") // 635.6082857142857144
 
     expect(await btc.balanceOf(user2.address)).eq(0)
-    expect(await glp.balanceOf(user2.address)).eq("398800000000000000000") // 398.8
+    expect(await klp.balanceOf(user2.address)).eq("398800000000000000000") // 398.8
 
     expect(await vault.poolAmounts(dai.address)).eq("700000000000000000") // 0.7
     expect(await vault.poolAmounts(bnb.address)).eq("91770714285714286") // 0.091770714285714286
@@ -388,7 +388,7 @@ describe("KlpManager", function () {
     await reportGasUsed(provider, tx1, "removeLiquidity gas used")
 
     expect(await btc.balanceOf(user2.address)).eq("993137")
-    expect(await glp.balanceOf(user2.address)).eq("23800000000000000000") // 23.8
+    expect(await klp.balanceOf(user2.address)).eq("23800000000000000000") // 23.8
   })
 
   it("addLiquidityForAccount, removeLiquidityForAccount", async () => {
@@ -421,7 +421,7 @@ describe("KlpManager", function () {
     expect(await dai.balanceOf(user0.address)).eq(0)
     expect(await dai.balanceOf(vault.address)).eq(0)
     expect(await usdg.balanceOf(klpManager.address)).eq(0)
-    expect(await glp.balanceOf(user0.address)).eq(0)
+    expect(await klp.balanceOf(user0.address)).eq(0)
     expect(await klpManager.lastAddedAt(user0.address)).eq(0)
     expect(await klpManager.getAumInUsdg(true)).eq(0)
 
@@ -440,8 +440,8 @@ describe("KlpManager", function () {
     expect(await dai.balanceOf(user0.address)).eq(0)
     expect(await dai.balanceOf(vault.address)).eq(expandDecimals(100, 18))
     expect(await usdg.balanceOf(klpManager.address)).eq("99700000000000000000") // 99.7
-    expect(await glp.balanceOf(user0.address)).eq("99700000000000000000")
-    expect(await glp.totalSupply()).eq("99700000000000000000")
+    expect(await klp.balanceOf(user0.address)).eq("99700000000000000000")
+    expect(await klp.totalSupply()).eq("99700000000000000000")
     expect(await klpManager.lastAddedAt(user0.address)).eq(blockTime)
     expect(await klpManager.getAumInUsdg(true)).eq("99700000000000000000")
 
@@ -462,9 +462,9 @@ describe("KlpManager", function () {
     blockTime = await getBlockTime(provider)
 
     expect(await usdg.balanceOf(klpManager.address)).eq("398800000000000000000") // 398.8
-    expect(await glp.balanceOf(user0.address)).eq("99700000000000000000")
-    expect(await glp.balanceOf(user1.address)).eq("299100000000000000000")
-    expect(await glp.totalSupply()).eq("398800000000000000000")
+    expect(await klp.balanceOf(user0.address)).eq("99700000000000000000")
+    expect(await klp.balanceOf(user1.address)).eq("299100000000000000000")
+    expect(await klp.totalSupply()).eq("398800000000000000000")
     expect(await klpManager.lastAddedAt(user1.address)).eq(blockTime)
     expect(await klpManager.getAumInUsdg(true)).eq("398800000000000000000")
 
@@ -494,7 +494,7 @@ describe("KlpManager", function () {
 
     expect(await dai.balanceOf(user0.address)).eq("79520720000000000000")
     expect(await bnb.balanceOf(user0.address)).eq(0)
-    expect(await glp.balanceOf(user0.address)).eq("19940000000000000000") // 19.94
+    expect(await klp.balanceOf(user0.address)).eq("19940000000000000000") // 19.94
   })
 
   context("Different avg price in Vault and ShortsTracker", async () => {

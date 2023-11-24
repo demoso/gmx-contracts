@@ -24,13 +24,13 @@ async function main() {
   await sendTxn(vaultPriceFeed.setPriceSampleSpace(1), "vaultPriceFeed.setPriceSampleSpace")
   await sendTxn(vaultPriceFeed.setIsAmmEnabled(false), "vaultPriceFeed.setIsAmmEnabled")
 
-  const glp = await deployContract("GLP", [])
-  await sendTxn(glp.setInPrivateTransferMode(true), "glp.setInPrivateTransferMode")
-  // const glp = await contractAt("GLP", "0x4277f8F2c384827B5273592FF7CeBd9f2C1ac258")
-  const klpManager = await deployContract("KlpManager", [vault.address, usdg.address, glp.address, 15 * 60])
+  const klp = await deployContract("KLP", [])
+  await sendTxn(klp.setInPrivateTransferMode(true), "klp.setInPrivateTransferMode")
+  // const klp = await contractAt("KLP", "0x4277f8F2c384827B5273592FF7CeBd9f2C1ac258")
+  const klpManager = await deployContract("KlpManager", [vault.address, usdg.address, klp.address, 15 * 60])
   await sendTxn(klpManager.setInPrivateMode(true), "klpManager.setInPrivateMode")
 
-  await sendTxn(glp.setMinter(klpManager.address, true), "glp.setMinter")
+  await sendTxn(klp.setMinter(klpManager.address, true), "klp.setMinter")
   await sendTxn(usdg.addVault(klpManager.address), "usdg.addVault(klpManager)")
 
   await sendTxn(vault.initialize(

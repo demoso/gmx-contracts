@@ -20,9 +20,9 @@ async function getArbValues() {
   const vestWithGlpOption = "0x9d8f6f6eE45275A5Ca3C6f6269c5622b1F9ED515"
 
   const gmxVester = await contractAt("Vester", "0x199070DDfd1CFb69173aa2F7e20906F26B363004")
-  const glpVester = await contractAt("Vester", "0xA75287d2f8b217273E7FCD7E86eF07D33972042E")
+  const klpVester = await contractAt("Vester", "0xA75287d2f8b217273E7FCD7E86eF07D33972042E")
 
-  return { esGmx, esGmxBatchSender, vestWithGmxOption, vestWithGlpOption, gmxVester, glpVester }
+  return {esGmx, esGmxBatchSender, vestWithGmxOption, vestWithGlpOption, gmxVester, klpVester}
 }
 
 async function getAvaxValues() {
@@ -32,16 +32,16 @@ async function getAvaxValues() {
   const vestWithGlpOption = "0x28863Dd19fb52DF38A9f2C6dfed40eeB996e3818"
 
   const gmxVester = await contractAt("Vester", "0x472361d3cA5F49c8E633FB50385BfaD1e018b445")
-  const glpVester = await contractAt("Vester", "0x62331A7Bd1dfB3A7642B7db50B5509E57CA3154A")
+  const klpVester = await contractAt("Vester", "0x62331A7Bd1dfB3A7642B7db50B5509E57CA3154A")
 
-  return { esGmx, esGmxBatchSender, vestWithGmxOption, vestWithGlpOption, gmxVester, glpVester }
+  return {esGmx, esGmxBatchSender, vestWithGmxOption, vestWithGlpOption, gmxVester, klpVester}
 }
 
 async function main() {
   const wallet = { address: "0x5F799f365Fa8A2B60ac0429C48B153cA5a6f0Cf8" }
 
   const values = network === "arbitrum" ? await getArbValues() : await getAvaxValues()
-  const { esGmx, esGmxBatchSender, vestWithGmxOption, vestWithGlpOption, gmxVester, glpVester } = values
+  const {esGmx, esGmxBatchSender, vestWithGmxOption, vestWithGlpOption, gmxVester, klpVester} = values
 
   const txns = await readCsv(inputFile)
   console.log("processing list", txns.length)
@@ -84,7 +84,7 @@ async function main() {
       await sendTxn(esGmxBatchSender.send(gmxVester.address, 4, vestWithGmxAccounts, vestWithGmxAmounts), "esGmxBatchSender.send(gmxVester)")
     }
     if (vestWithGlpAccounts.length > 0) {
-      await sendTxn(esGmxBatchSender.send(glpVester.address, 320, vestWithGlpAccounts, vestWithGlpAmounts), "esGmxBatchSender.send(glpVester)")
+      await sendTxn(esGmxBatchSender.send(klpVester.address, 320, vestWithGlpAccounts, vestWithGlpAmounts), "esGmxBatchSender.send(klpVester)")
     }
   }
 }

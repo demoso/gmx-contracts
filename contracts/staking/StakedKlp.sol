@@ -20,7 +20,7 @@ contract StakedKlp {
     string public constant symbol = "sKLP";
     uint8 public constant decimals = 18;
 
-    address public glp;
+    address public klp;
     IKlpManager public klpManager;
     address public stakedKlpTracker;
     address public feeGlpTracker;
@@ -30,12 +30,12 @@ contract StakedKlp {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 
     constructor(
-        address _glp,
+        address _klp,
         IKlpManager _klpManager,
         address _stakedKlpTracker,
         address _feeGlpTracker
     ) public {
-        glp = _glp;
+        klp = _klp;
         klpManager = _klpManager;
         stakedKlpTracker = _stakedKlpTracker;
         feeGlpTracker = _feeGlpTracker;
@@ -63,7 +63,7 @@ contract StakedKlp {
     }
 
     function balanceOf(address _account) external view returns (uint256) {
-        return IRewardTracker(feeGlpTracker).depositBalances(_account, glp);
+        return IRewardTracker(feeGlpTracker).depositBalances(_account, klp);
     }
 
     function totalSupply() external view returns (uint256) {
@@ -89,9 +89,9 @@ contract StakedKlp {
         );
 
         IRewardTracker(stakedKlpTracker).unstakeForAccount(_sender, feeGlpTracker, _amount, _sender);
-        IRewardTracker(feeGlpTracker).unstakeForAccount(_sender, glp, _amount, _sender);
+        IRewardTracker(feeGlpTracker).unstakeForAccount(_sender, klp, _amount, _sender);
 
-        IRewardTracker(feeGlpTracker).stakeForAccount(_sender, _recipient, glp, _amount);
+        IRewardTracker(feeGlpTracker).stakeForAccount(_sender, _recipient, klp, _amount);
         IRewardTracker(stakedKlpTracker).stakeForAccount(_recipient, _recipient, feeGlpTracker, _amount);
     }
 }

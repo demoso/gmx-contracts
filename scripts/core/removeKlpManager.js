@@ -12,11 +12,11 @@ async function main() {
 
   const vault = await contractAt("Vault", "0xDE3590067c811b6F023b557ed45E4f1067859663")
   const usdg = await contractAt("USDG", "0x45096e7aA921f27590f8F19e457794EB09678141")
-  const glp = await contractAt("GLP", "0x4277f8F2c384827B5273592FF7CeBd9f2C1ac258")
+  const klp = await contractAt("KLP", "0x4277f8F2c384827B5273592FF7CeBd9f2C1ac258")
 
   const klpManager = await contractAt("KlpManager", "0x91425Ac4431d068980d497924DD540Ae274f3270")
 
-  await sendTxn(glp.setMinter(klpManager.address, false), "glp.setMinter")
+  await sendTxn(klp.setMinter(klpManager.address, false), "klp.setMinter")
   await sendTxn(usdg.removeVault(klpManager.address), "usdg.removeVault")
   await sendTxn(vault.setManager(klpManager.address, false), "vault.setManager")
 }

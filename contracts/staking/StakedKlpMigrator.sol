@@ -20,19 +20,19 @@ contract StakedKlpMigrator is Governable {
     using SafeMath for uint256;
 
     address public sender;
-    address public glp;
+    address public klp;
     address public stakedKlpTracker;
     address public feeGlpTracker;
     bool public isEnabled = true;
 
     constructor(
         address _sender,
-        address _glp,
+        address _klp,
         address _stakedKlpTracker,
         address _feeGlpTracker
     ) public {
         sender = _sender;
-        glp = _glp;
+        klp = _klp;
         stakedKlpTracker = _stakedKlpTracker;
         feeGlpTracker = _feeGlpTracker;
     }
@@ -51,9 +51,9 @@ contract StakedKlpMigrator is Governable {
         require(_recipient != address(0), "StakedKlpMigrator: transfer to the zero address");
 
         IRewardTracker(stakedKlpTracker).unstakeForAccount(_sender, feeGlpTracker, _amount, _sender);
-        IRewardTracker(feeGlpTracker).unstakeForAccount(_sender, glp, _amount, _sender);
+        IRewardTracker(feeGlpTracker).unstakeForAccount(_sender, klp, _amount, _sender);
 
-        IRewardTracker(feeGlpTracker).stakeForAccount(_sender, _recipient, glp, _amount);
+        IRewardTracker(feeGlpTracker).stakeForAccount(_sender, _recipient, klp, _amount);
         IRewardTracker(stakedKlpTracker).stakeForAccount(_recipient, _recipient, feeGlpTracker, _amount);
     }
 }

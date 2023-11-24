@@ -29,7 +29,7 @@ describe("Vault.liquidateLongPosition", function () {
   let yieldTracker0
 
   let klpManager
-  let glp
+  let klp
 
   beforeEach(async () => {
     bnb = await deployContract("Token", [])
@@ -67,8 +67,8 @@ describe("Vault.liquidateLongPosition", function () {
     await vaultPriceFeed.setTokenConfig(btc.address, btcPriceFeed.address, 8, false)
     await vaultPriceFeed.setTokenConfig(dai.address, daiPriceFeed.address, 8, false)
 
-    glp = await deployContract("GLP", [])
-    klpManager = await deployContract("KlpManager", [vault.address, usdg.address, glp.address, ethers.constants.AddressZero, 24 * 60 * 60])
+    klp = await deployContract("KLP", [])
+    klpManager = await deployContract("KlpManager", [vault.address, usdg.address, klp.address, ethers.constants.AddressZero, 24 * 60 * 60])
   })
 
   it("liquidate long", async () => {

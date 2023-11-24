@@ -23,7 +23,7 @@ async function getArbValues() {
     ["Old KlpManager", "0x321F653eED006AD1C29D174e17d96351BDe22649", "KlpManager"],
     ["New KlpManager", "0x3963FfC9dff443c2A94f21b129D429891E32ec18", "KlpManager"],
     // MintableBaseToken methods: isHandler, isMinter
-    ["GLP", "0x4277f8F2c384827B5273592FF7CeBd9f2C1ac258", "MintableBaseToken"],
+    ["KLP", "0x4277f8F2c384827B5273592FF7CeBd9f2C1ac258", "MintableBaseToken"],
     ["GMX", "0xfc5A1A6EB076a2C7aD06eD22C90d7E710E35ad0a", "MintableBaseToken"],
     ["ES_GMX", "0xf42Ae1D54fd613C9bb14810b0588FaAa09a426cA", "MintableBaseToken"],
     ["BN_GMX", "0x35247165119B69A40edD5304969560D0ef486921", "MintableBaseToken"],
@@ -54,7 +54,7 @@ async function getAvaxValues() {
     ["Old KlpManager", "0xe1ae4d4b06A5Fe1fc288f6B4CD72f9F8323B107F", "KlpManager"],
     ["New KlpManager", "0xD152c7F25db7F4B95b7658323c5F33d176818EE4", "KlpManager"],
     // MintableBaseToken methods: isHandler, isMinter
-    ["GLP", "0x01234181085565ed162a948b6a5e88758CD7c7b8", "MintableBaseToken"],
+    ["KLP", "0x01234181085565ed162a948b6a5e88758CD7c7b8", "MintableBaseToken"],
     ["GMX", "0x62edc0692BD897D2295872a9FFCac5425011c661", "MintableBaseToken"],
     ["ES_GMX", "0xFf1489227BbAAC61a9209A08929E4c2a526DdD17", "MintableBaseToken"],
     ["BN_GMX", "0x8087a341D32D445d9aC8aCc9c14F5781E04A26d2", "MintableBaseToken"],

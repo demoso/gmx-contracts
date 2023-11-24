@@ -196,17 +196,17 @@ async function updateRewards() {
   const rewardAmounts = {
     arbitrum: {
       gmx: bigNumberify(feeReference.gmxFees.arbitrum),
-      glp: bigNumberify(feeReference.glpFees.arbitrum),
+      klp: bigNumberify(feeReference.klpFees.arbitrum),
     },
     avax: {
       gmx: bigNumberify(feeReference.gmxFees.avax),
-      glp: bigNumberify(feeReference.glpFees.avax),
+      klp: bigNumberify(feeReference.klpFees.avax),
     }
   }
 
   const expectedMinBalance = {
-    arbitrum: rewardAmounts.arbitrum.gmx.add(rewardAmounts.arbitrum.glp),
-    avax: rewardAmounts.avax.gmx.add(rewardAmounts.avax.glp),
+    arbitrum: rewardAmounts.arbitrum.gmx.add(rewardAmounts.arbitrum.klp),
+    avax: rewardAmounts.avax.gmx.add(rewardAmounts.avax.klp),
   }
 
   const stakingValues = {
@@ -235,10 +235,10 @@ async function updateRewards() {
     // distribution
     const rewardAmount = rewardAmounts[network]
     const gmxRewardAmount = rewardAmount.gmx.mul(9950).div(10_000)
-    const glpRewardAmount = rewardAmount.glp.mul(9950).div(10_000)
+    const klpRewardAmount = rewardAmount.klp.mul(9950).div(10_000)
 
     stakingValues[network].rewardTrackerArr[0].transferAmount = gmxRewardAmount
-    stakingValues[network].rewardTrackerArr[1].transferAmount = glpRewardAmount
+    stakingValues[network].rewardTrackerArr[1].transferAmount = klpRewardAmount
 
     await updateStakingRewards({
       signer: handlers[network],

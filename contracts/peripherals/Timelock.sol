@@ -126,8 +126,8 @@ contract Timelock is ITimelock {
     function initKlpManager() external onlyAdmin {
         IKlpManager _klpManager = IKlpManager(klpManager);
 
-        IMintable glp = IMintable(_klpManager.glp());
-        glp.setMinter(klpManager, true);
+        IMintable klp = IMintable(_klpManager.klp());
+        klp.setMinter(klpManager, true);
 
         IUSDG usdg = IUSDG(_klpManager.usdg());
         usdg.addVault(klpManager);

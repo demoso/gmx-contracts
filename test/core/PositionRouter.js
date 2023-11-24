@@ -2747,11 +2747,11 @@ describe("PositionRouter", function () {
     let klpManager
 
     beforeEach(async () => {
-      const glp = await deployContract("GLP", [])
+      const klp = await deployContract("KLP", [])
       klpManager = await deployContract("KlpManager", [
         vault.address,
         usdg.address,
-        glp.address,
+        klp.address,
         shortsTracker.address,
         24 * 60 * 60
       ])

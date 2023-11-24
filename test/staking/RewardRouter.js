@@ -15,7 +15,7 @@ describe("RewardRouter", function () {
 
   let vault
   let klpManager
-  let glp
+  let klp
   let usdg
   let router
   let vaultPriceFeed
@@ -68,10 +68,10 @@ describe("RewardRouter", function () {
     usdg = await deployContract("USDG", [vault.address])
     router = await deployContract("Router", [vault.address, usdg.address, bnb.address])
     vaultPriceFeed = await deployContract("VaultPriceFeed", [])
-    glp = await deployContract("GLP", [])
+    klp = await deployContract("KLP", [])
 
     await initVault(vault, router, usdg, vaultPriceFeed)
-    klpManager = await deployContract("KlpManager", [vault.address, usdg.address, glp.address, ethers.constants.AddressZero, 24 * 60 * 60])
+    klpManager = await deployContract("KlpManager", [vault.address, usdg.address, klp.address, ethers.constants.AddressZero, 24 * 60 * 60])
 
     await vaultPriceFeed.setTokenConfig(bnb.address, bnbPriceFeed.address, 8, false)
     await vaultPriceFeed.setTokenConfig(btc.address, btcPriceFeed.address, 8, false)
@@ -87,8 +87,8 @@ describe("RewardRouter", function () {
     await bnbPriceFeed.setLatestAnswer(toChainlinkPrice(300))
     await vault.setTokenConfig(...getBnbConfig(bnb, bnbPriceFeed))
 
-    await glp.setInPrivateTransferMode(true)
-    await glp.setMinter(klpManager.address, true)
+    await klp.setInPrivateTransferMode(true)
+    await klp.setMinter(klpManager.address, true)
     await klpManager.setInPrivateMode(true)
 
     gmx = await deployContract("GMX", []);
@@ -111,13 +111,13 @@ describe("RewardRouter", function () {
     await feeGmxTracker.initialize([bonusGmxTracker.address, bnGmx.address], feeGmxDistributor.address)
     await feeGmxDistributor.updateLastDistributionTime()
 
-    // GLP
-    feeGlpTracker = await deployContract("RewardTracker", ["Fee GLP", "fGLP"])
+    // KLP
+    feeGlpTracker = await deployContract("RewardTracker", ["Fee KLP", "fKLP"])
     feeGlpDistributor = await deployContract("RewardDistributor", [eth.address, feeGlpTracker.address])
-    await feeGlpTracker.initialize([glp.address], feeGlpDistributor.address)
+    await feeGlpTracker.initialize([klp.address], feeGlpDistributor.address)
     await feeGlpDistributor.updateLastDistributionTime()
 
-    stakedKlpTracker = await deployContract("RewardTracker", ["Fee + Staked GLP", "fsGLP"])
+    stakedKlpTracker = await deployContract("RewardTracker", ["Fee + Staked KLP", "fsKLP"])
     stakedKlpDistributor = await deployContract("RewardDistributor", [esGmx.address, stakedKlpTracker.address])
     await stakedKlpTracker.initialize([feeGlpTracker.address], stakedKlpDistributor.address)
     await stakedKlpDistributor.updateLastDistributionTime()
@@ -141,7 +141,7 @@ describe("RewardRouter", function () {
       gmx.address,
       esGmx.address,
       bnGmx.address,
-      glp.address,
+      klp.address,
       stakedGmxTracker.address,
       bonusGmxTracker.address,
       feeGmxTracker.address,
@@ -174,8 +174,8 @@ describe("RewardRouter", function () {
     await feeGlpTracker.setHandler(stakedKlpTracker.address, true)
     // allow rewardRouter to sake in stakedKlpTracker
     await stakedKlpTracker.setHandler(rewardRouter.address, true)
-    // allow feeGlpTracker to stake glp
-    await glp.setHandler(feeGlpTracker.address, true)
+    // allow feeGlpTracker to stake klp
+    await klp.setHandler(feeGlpTracker.address, true)
 
     // mint esGmx for distributors
     await esGmx.setMinter(wallet.address, true)
@@ -204,7 +204,7 @@ describe("RewardRouter", function () {
     expect(await rewardRouter.esGmx()).eq(esGmx.address)
     expect(await rewardRouter.bnGmx()).eq(bnGmx.address)
 
-    expect(await rewardRouter.glp()).eq(glp.address)
+    expect(await rewardRouter.klp()).eq(klp.address)
 
     expect(await rewardRouter.stakedGmxTracker()).eq(stakedGmxTracker.address)
     expect(await rewardRouter.bonusGmxTracker()).eq(bonusGmxTracker.address)
@@ -220,7 +220,7 @@ describe("RewardRouter", function () {
       gmx.address,
       esGmx.address,
       bnGmx.address,
-      glp.address,
+      klp.address,
       stakedGmxTracker.address,
       bonusGmxTracker.address,
       feeGmxTracker.address,
@@ -432,7 +432,7 @@ describe("RewardRouter", function () {
     await reportGasUsed(provider, tx0, "mintAndStakeGlp gas used")
 
     expect(await feeGlpTracker.stakedAmounts(user1.address)).eq(expandDecimals(2991, 17))
-    expect(await feeGlpTracker.depositBalances(user1.address, glp.address)).eq(expandDecimals(2991, 17))
+    expect(await feeGlpTracker.depositBalances(user1.address, klp.address)).eq(expandDecimals(2991, 17))
 
     expect(await stakedKlpTracker.stakedAmounts(user1.address)).eq(expandDecimals(2991, 17))
     expect(await stakedKlpTracker.depositBalances(user1.address, feeGlpTracker.address)).eq(expandDecimals(2991, 17))
@@ -562,7 +562,7 @@ describe("RewardRouter", function () {
       .to.be.revertedWith("KlpManager: insufficient USDG output")
 
     await expect(rewardRouter.connect(user0).mintAndStakeGlpETH(expandDecimals(299, 18), expandDecimals(300, 18), {value: expandDecimals(1, 18)}))
-      .to.be.revertedWith("KlpManager: insufficient GLP output")
+      .to.be.revertedWith("KlpManager: insufficient KLP output")
 
     expect(await bnb.balanceOf(user0.address)).eq(0)
     expect(await bnb.balanceOf(vault.address)).eq(0)

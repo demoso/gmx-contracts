@@ -21,8 +21,8 @@ async function main() {
     ["AVAX sbfGMX", formatAmount(values.avax.stakedGmxSupply, 18, 2)],
     ["ARB Keeper Costs", formatAmount(values.arbitrum.keeperCosts, 18, 2)],
     ["AVAX Keeper Costs", formatAmount(values.avax.keeperCosts, 18, 2)],
-    ["GLP AUM (ARB)", formatAmount(values.arbitrum.glpAum, 30, 2)],
-    ["GLP AUM (AVAX)", formatAmount(values.avax.glpAum, 30, 2)],
+    ["KLP AUM (ARB)", formatAmount(values.arbitrum.klpAum, 30, 2)],
+    ["KLP AUM (AVAX)", formatAmount(values.avax.klpAum, 30, 2)],
   ]
 
   for (let i = 0; i < data.length; i++) {
