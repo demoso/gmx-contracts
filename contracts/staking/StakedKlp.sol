@@ -10,7 +10,7 @@ import "../core/interfaces/IKlpManager.sol";
 import "./interfaces/IRewardTracker.sol";
 import "./interfaces/IRewardTracker.sol";
 
-// provide a way to transfer staked GLP tokens by unstaking from the sender
+// provide a way to transfer staked KLP tokens by unstaking from the sender
 // and staking for the receiver
 // tests in RewardRouterV2.js
 contract StakedKlp {

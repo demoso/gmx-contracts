@@ -20,7 +20,7 @@ contract KlpManager is ReentrancyGuard, Governable, IKlpManager {
 
     uint256 public constant PRICE_PRECISION = 10 ** 30;
     uint256 public constant USDG_DECIMALS = 18;
-    uint256 public constant GLP_PRECISION = 10 ** 18;
+    uint256 public constant KLP_PRECISION = 10 ** 18;
     uint256 public constant MAX_COOLDOWN_DURATION = 48 hours;
     uint256 public constant BASIS_POINTS_DIVISOR = 10000;
 
@@ -118,7 +118,7 @@ contract KlpManager is ReentrancyGuard, Governable, IKlpManager {
     function getPrice(bool _maximise) external view returns (uint256) {
         uint256 aum = getAum(_maximise);
         uint256 supply = IERC20(glp).totalSupply();
-        return aum.mul(GLP_PRECISION).div(supply);
+        return aum.mul(KLP_PRECISION).div(supply);
     }
 
     function getAums() public view returns (uint256[] memory) {
@@ -218,7 +218,7 @@ contract KlpManager is ReentrancyGuard, Governable, IKlpManager {
         require(usdgAmount >= _minUsdg, "KlpManager: insufficient USDG output");
 
         uint256 mintAmount = aumInUsdg == 0 ? usdgAmount : usdgAmount.mul(glpSupply).div(aumInUsdg);
-        require(mintAmount >= _minGlp, "KlpManager: insufficient GLP output");
+        require(mintAmount >= _minGlp, "KlpManager: insufficient KLP output");
 
         IMintable(glp).mint(_account, mintAmount);
 

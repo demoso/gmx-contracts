@@ -12,7 +12,7 @@ import "./interfaces/IRewardTracker.sol";
 
 import "../access/Governable.sol";
 
-// provide a way to migrate staked GLP tokens by unstaking from the sender
+// provide a way to migrate staked KLP tokens by unstaking from the sender
 // and staking for the receiver
 // meant for a one-time use for a specified sender
 // requires the contract to be added as a handler for stakedKlpTracker and feeGlpTracker
